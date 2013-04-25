@@ -50,6 +50,7 @@ sub integer_constructor {
     }
 
     $base //= 10;  # Default.
+    $base   = 10 unless length $base;
 
     if ($base =~ /[^0-9]/ || $base < 1 || $base > 36) {
         require Carp;
