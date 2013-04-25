@@ -12,8 +12,9 @@ our $VERSION = '2013042501';
 
 pattern Number   => 'integer',
         -config  => {
-            -base     =>   10,
             -sign     => '[-+]?',
+            -base     =>   10,
+            -case     =>  'up',
             -sep      =>  undef,
             -group    =>  undef,
             -places   =>  undef,
@@ -27,8 +28,9 @@ sub integer_constructor {
     my %args     = @_;
     my $warn     = $args {-Warn};
 
-    my $base     = $args {-base};
     my $sign     = $args {-sign};
+    my $base     = $args {-base} // 10;
+    my $case     = $args {-case} // "";
     my $sep      = $args {-sep};
     my $group    = $args {-group};
     my $places   = $args {-places};
@@ -58,7 +60,19 @@ sub integer_constructor {
                      "1 and 36 inclusive");
     }
 
+    if (lc $case !~ /^(?:up|down|mixed)$/) {
+        require Carp;
+        Carp::croak ("-case should be one of 'up', 'down' or 'mixed'");
+    }
+
     my $class = substr "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, $base;
+
+    if (lc $case eq 'down') {
+        $class = lc $class;
+    }
+    elsif (lc $case eq 'mixed') {
+        $class .= lc substr $class => 10 if $base > 10;
+    }
 
     $sign = '' if $unsigned;
 

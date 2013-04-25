@@ -91,4 +91,24 @@ our @integers = (
          name               => "Number integer -base => 30",
          tags               => {-base => '30', -sign => 'minus'},
     ),
+
+    our $integer_30_mixed   =   Test::Regexp:: -> new -> init (
+         pattern            =>  RE (Number => 'integer', -Keep => 0,
+                                    -case  => 'mixed',   -base => 30),
+         keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
+                                    -case  => 'mixed',   -base => 30),
+         full_text          =>  1,
+         name               => "Number integer -base => 30 -case => 'mixed'",
+         tags               => {-base => '30', -sign => '', -case => 'mixed'},
+    ),
+
+    our $integer_30_down    =   Test::Regexp:: -> new -> init (
+         pattern            =>  RE (Number => 'integer', -Keep => 0,
+                                    -case  => 'down',    -base => 30),
+         keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
+                                    -case  => 'down',    -base => 30),
+         full_text          =>  1,
+         name               => "Number integer -base => 30 -case => 'down'",
+         tags               => {-base => '30', -sign => '', -case => 'down'},
+    ),
 );

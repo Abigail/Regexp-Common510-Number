@@ -12,14 +12,24 @@ use t::Patterns;
 
 our $r = eval "require Test::NoWarnings; 1";
 
-my @test_4  = grep {$_ -> tag ('-base') eq  "4"} @integers;
-my @test_10 = grep {$_ -> tag ('-base') eq "10"} @integers;
-my @test_30 = grep {$_ -> tag ('-base') eq "30"} @integers;
+my @test_4    = grep {$_ -> tag ('-base') eq  "4"} @integers;
+my @test_10   = grep {$_ -> tag ('-base') eq "10"} @integers;
+#
+# Includes 'mixed'
+#
+my @test_30   = grep {$_ -> tag ('-base') eq "30" &&
+                    (!$_ -> tag ('-case') || $_ -> tag ('-case') ne 'down')}
+                      @integers;
+my @test_30_l = grep {$_ -> tag ('-base') eq '30' &&
+                      $_ -> tag ('-case') && ($_ -> tag ('-case') eq 'lower' ||
+                                              $_ -> tag ('-case') eq 'mixed')}
+                      @integers;
 
-my @pass_4  = (0 .. 3, 10 .. 13, "3210" x 20);
-my @fail_4  = (4 .. 9, 14, "123123112312391231231213");
-my @pass_30 = (0 .. 9, "A" .. "T", "TSRQPONMLKJIHGFEDCBA9876543210");
-my @fail_30 = ("U" .. "Z", "1234567ABCDEFLMNU0987654321");
+my @pass_4    = (0 .. 3, 10 .. 13, "3210" x 20);
+my @fail_4    = (4 .. 9, 14, "123123112312391231231213");
+my @pass_30   = (0 .. 9, "A" .. "T", "TSRQPONMLKJIHGFEDCBA9876543210");
+my @pass_30_l = ("a" .. "t", "abcdefghijklmnopqrst");
+my @fail_30   = ("U" .. "Z", "1234567ABCDEFLMNU0987654321");
 
 foreach my $num (@pass_4) {
     my $integer = $num;
@@ -175,6 +185,23 @@ foreach my $num (@fail_30) {
                 $integer,
                 reason => "Incorrect base"
             )
+        }
+    }
+}
+
+
+for my $num (@pass_30_l) {
+    foreach my $sign ("", "-", "+") {
+        my $integer = "${sign}${num}";
+
+        foreach my $test (@test_30_l) {
+            $test -> match (
+                $integer,
+                test     => "Lower case",
+                captures => [[number     => $integer],
+                             [sign       => $sign],
+                             [abs_number => $num]]
+            );
         }
     }
 }
