@@ -49,9 +49,19 @@ sub integer_constructor {
         undef $places;
     }
 
+    $base //= 10;  # Default.
+
+    if ($base =~ /[^0-9]/ || $base < 1 || $base > 36) {
+        require Carp;
+        Carp::croak ("-base must be an unsigned integer between " .
+                     "1 and 36 inclusive");
+    }
+
+    my $class = substr "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, $base;
+
     $sign = '' if $unsigned;
 
-    return "(?k<number>:(?k<sign>:$sign)(?k<abs_number>:[0-9]+))";
+    return "(?k<number>:(?k<sign>:$sign)(?k<abs_number>:[$class]+))";
 }
 
 

@@ -52,4 +52,43 @@ our @integers = (
          tags               => {-base => '10', -sign => 'unsigned'},
     ),
 
+    our $integer_4          =   Test::Regexp:: -> new -> init (
+         pattern            =>  RE (Number => 'integer', -Keep => 0,
+                                                         -base => 4),
+         keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
+                                                         -base => 4),
+         full_text          =>  1,
+         name               => "Number integer -base => 4",
+         tags               => {-base => '4', -sign => ''},
+    ),
+
+    our $integer_4_signed   =   Test::Regexp:: -> new -> init (
+         pattern            =>  RE (Number => 'integer', -Keep => 0,
+                                   -base   => 4,         -sign => '[-+]'),
+         keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
+                                   -base   => 4,         -sign => '[-+]'),
+         full_text          =>  1,
+         name               => "Number integer -base => 4",
+         tags               => {-base => '4', -sign => 'signed'},
+    ),
+
+    our $integer_30         =   Test::Regexp:: -> new -> init (
+         pattern            =>  RE (Number => 'integer', -Keep => 0,
+                                                         -base => 30),
+         keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
+                                                         -base => 30),
+         full_text          =>  1,
+         name               => "Number integer -base => 30",
+         tags               => {-base => '30', -sign => ''},
+    ),
+
+    our $integer_30_minus   =   Test::Regexp:: -> new -> init (
+         pattern            =>  RE (Number => 'integer', -Keep => 0,
+                                   -base   => 30,        -sign => '-'),
+         keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
+                                   -base   => 30,        -sign => '-'),
+         full_text          =>  1,
+         name               => "Number integer -base => 30",
+         tags               => {-base => '30', -sign => 'minus'},
+    ),
 );
