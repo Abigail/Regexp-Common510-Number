@@ -2,10 +2,57 @@ package Regexp::Common510::Number;
 
 use 5.010;
 use strict;
+
+use Regexp::Common510;
+
 use warnings;
 no  warnings 'syntax';
 
 our $VERSION = '2013042501';
+
+pattern Number   => 'integer',
+        -config  => {
+            -base     =>   10,
+            -sign     => '[-+]?',
+            -sep      =>  undef,
+            -group    =>  undef,
+            -places   =>  undef,
+            -unsigned =>  undef,
+        },
+        -pattern => \&integer_constructor,
+;
+
+
+sub integer_constructor {
+    my %args     = @_;
+    my $warn     = $args {-Warn};
+
+    my $base     = $args {-base};
+    my $sign     = $args {-sign};
+    my $sep      = $args {-sep};
+    my $group    = $args {-group};
+    my $places   = $args {-places};
+    my $unsigned = $args {-unsigned};
+
+    if (defined $group && !defined $sep) {
+        if ($warn) {
+            warn "You must define a separator (-sep) if you have group size\n"
+        }
+        undef $group;
+    }
+
+    if (defined $places && defined $sep) {
+        if ($warn) {
+            warn "You cannot defined -places, if you have defined a " .
+                 "separator (-sep)\n";
+        }
+        undef $places;
+    }
+
+    $sign = '' if $unsigned;
+
+    return "(?k<number>:(?k<sign>:$sign)(?k<abs_number>:[0-9]+))";
+}
 
 
 1;
