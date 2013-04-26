@@ -9,6 +9,7 @@ t/050_integer/021_base.t
 t/050_integer/025_base_bin.t
 t/050_integer/026_base_oct.t
 t/050_integer/027_base_hex.t
+t/050_integer/030_prefix.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t
