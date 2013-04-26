@@ -34,7 +34,7 @@ our @integers = (
          keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
                                                          -sign => '[+]'),
          full_text          =>  1,
-         name               => "Number integer -sign => '[+]?'",
+         name               => "Number integer -sign => '[+]'",
          tags               => {-base => '10', -sign => 'plus'},
     ),
 
@@ -44,7 +44,7 @@ our @integers = (
          keep_pattern       =>  RE (Number => 'integer', -Keep => 1,
                                                          -sign => '[-]'),
          full_text          =>  1,
-         name               => "Number integer -sign => '[-]?'",
+         name               => "Number integer -sign => '[-]'",
          tags               => {-base => '10', -sign => 'minus'},
     ),
 
