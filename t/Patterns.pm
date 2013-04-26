@@ -25,7 +25,6 @@ our @integers = (
          keep_pattern       =>  RE (Number => 'integer', -Keep => 1),
          full_text          =>  1,
          name               => "Number integer",
-         tags               => {-base => '10', -sign => ''},
     ),
 
     our $integer_plus       =   Test::Regexp:: -> new -> init (
@@ -35,7 +34,6 @@ our @integers = (
                                                          -sign => '[+]'),
          full_text          =>  1,
          name               => "Number integer -sign => '[+]'",
-         tags               => {-base => '10', -sign => 'plus'},
     ),
 
     our $integer_minus      =   Test::Regexp:: -> new -> init (
@@ -45,7 +43,6 @@ our @integers = (
                                                          -sign => '[-]'),
          full_text          =>  1,
          name               => "Number integer -sign => '[-]'",
-         tags               => {-base => '10', -sign => 'minus'},
     ),
 
     our $integer_unsigned   =   Test::Regexp:: -> new -> init (
@@ -55,7 +52,6 @@ our @integers = (
                                                          -unsigned => 1),
          full_text          =>  1,
          name               => "Number integer -unsigned => 1",
-         tags               => {-base => '10', -sign => 'unsigned'},
     ),
 
     our $integer_4          =   Test::Regexp:: -> new -> init (
@@ -65,7 +61,6 @@ our @integers = (
                                                          -base => 4),
          full_text          =>  1,
          name               => "Number integer -base => 4",
-         tags               => {-base => '4', -sign => ''},
     ),
 
     our $integer_4_signed   =   Test::Regexp:: -> new -> init (
@@ -75,7 +70,6 @@ our @integers = (
                                    -base   => 4,         -sign => '[-+]'),
          full_text          =>  1,
          name               => "Number integer -base => 4",
-         tags               => {-base => '4', -sign => 'signed'},
     ),
 
     our $integer_30         =   Test::Regexp:: -> new -> init (
@@ -85,7 +79,6 @@ our @integers = (
                                                          -base => 30),
          full_text          =>  1,
          name               => "Number integer -base => 30",
-         tags               => {-base => '30', -sign => ''},
     ),
 
     our $integer_30_minus   =   Test::Regexp:: -> new -> init (
@@ -95,7 +88,6 @@ our @integers = (
                                    -base   => 30,        -sign => '-'),
          full_text          =>  1,
          name               => "Number integer -base => 30",
-         tags               => {-base => '30', -sign => 'minus'},
     ),
 
     our $integer_30_mixed   =   Test::Regexp:: -> new -> init (
@@ -105,7 +97,6 @@ our @integers = (
                                     -case  => 'mixed',   -base => 30),
          full_text          =>  1,
          name               => "Number integer -base => 30 -case => 'mixed'",
-         tags               => {-base => '30', -sign => '', -case => 'mixed'},
     ),
 
     our $integer_30_down    =   Test::Regexp:: -> new -> init (
@@ -115,7 +106,6 @@ our @integers = (
                                     -case  => 'down',    -base => 30),
          full_text          =>  1,
          name               => "Number integer -base => 30 -case => 'down'",
-         tags               => {-base => '30', -sign => '', -case => 'down'},
     ),
 
     our $integer_bin        =   Test::Regexp:: -> new -> init (
@@ -125,7 +115,6 @@ our @integers = (
                                                          -base => "bin"),
          full_text          =>  1,
          name               => "Number integer -base => 'bin'",
-         tags               => {-base => 'bin', -sign => ''},
     ),
 
     our $integer_BIN        =   Test::Regexp:: -> new -> init (
@@ -135,7 +124,6 @@ our @integers = (
                                                          -base => "BIN"),
          full_text          =>  1,
          name               => "Number integer -base => 'BIN'",
-         tags               => {-base => 'BIN', -sign => ''},
     ),
 
     our $integer_BiN        =   Test::Regexp:: -> new -> init (
@@ -145,7 +133,6 @@ our @integers = (
                                                          -base => "BiN"),
          full_text          =>  1,
          name               => "Number integer -base => 'BiN'",
-         tags               => {-base => 'BiN', -sign => ''},
     ),
 
     our $integer_oct        =   Test::Regexp:: -> new -> init (
@@ -155,7 +142,6 @@ our @integers = (
                                                          -base => "oct"),
          full_text          =>  1,
          name               => "Number integer -base => 'oct'",
-         tags               => {-base => 'oct', -sign => ''},
     ),
 
     our $integer_OCT        =   Test::Regexp:: -> new -> init (
@@ -165,7 +151,6 @@ our @integers = (
                                                          -base => "OCT"),
          full_text          =>  1,
          name               => "Number integer -base => 'OCT'",
-         tags               => {-base => 'OCT', -sign => ''},
     ),
 
     our $integer_hex        =   Test::Regexp:: -> new -> init (
@@ -175,7 +160,6 @@ our @integers = (
                                                          -base => "hex"),
          full_text          =>  1,
          name               => "Number integer -base => 'hex'",
-         tags               => {-base => 'hex', -sign => ''},
     ),
 
     our $integer_HEX        =   Test::Regexp:: -> new -> init (
@@ -185,7 +169,6 @@ our @integers = (
                                                          -base => "HEX"),
          full_text          =>  1,
          name               => "Number integer -base => 'HEX'",
-         tags               => {-base => 'HEX', -sign => ''},
     ),
 
     our $integer_HeX        =   Test::Regexp:: -> new -> init (
@@ -195,7 +178,5 @@ our @integers = (
                                                          -base => "HeX"),
          full_text          =>  1,
          name               => "Number integer -base => 'HeX'",
-         tags               => {-base => 'HeX', -sign => ''},
     ),
-
 );
