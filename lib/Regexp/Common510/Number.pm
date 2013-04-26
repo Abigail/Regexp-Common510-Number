@@ -13,12 +13,13 @@ our $VERSION = '2013042501';
 pattern Number   => 'integer',
         -config  => {
             -sign     => '[-+]?',
-            -base     =>   10,
-            -case     =>  'up',
-            -sep      =>  undef,
-            -group    =>  undef,
-            -places   =>  undef,
-            -unsigned =>  undef,
+            -base     =>      10,
+            -case     =>    'up',
+            -sep      =>   undef,
+            -group    =>   undef,
+            -places   =>   undef,
+            -unsigned =>   undef,
+            -prefix   =>      '',
         },
         -pattern => \&integer_constructor,
 ;
@@ -35,6 +36,7 @@ sub integer_constructor {
     my $group    = $args {-group};
     my $places   = $args {-places};
     my $unsigned = $args {-unsigned};
+    my $prefix   = $args {-prefix} // "";
 
     if (defined $group && !defined $sep) {
         if ($warn) {
@@ -51,10 +53,32 @@ sub integer_constructor {
         undef $places;
     }
 
+    #
+    # Process -base
+    #
     $base //= 10;  # Default.
     $base   = 10 unless length $base;
 
-    if ($base =~ /[^0-9]/ || $base < 1 || $base > 36) {
+    if (lc $base eq 'bin') {
+        $prefix = $base eq 'bin' ? '0b'
+                : $base eq 'BIN' ? '0B'
+                :                  '0[bB]';
+        $base   =  2;
+    }
+    elsif (lc $base eq 'oct') {
+        $prefix = '0';
+        $base   =  8;
+    }
+    elsif (lc $base eq 'hex') {
+        $prefix = $base eq 'hex' ? '0x'
+                : $base eq 'HEX' ? '0X'
+                :                  '0[xX]';
+        $base   = 16;
+        $case   = $base eq 'hex' ? 'lower'
+                : $base eq 'HEX' ? 'up'
+                :                  'mixed';
+    }
+    elsif ($base =~ /[^0-9]/ || $base < 1 || $base > 36) {
         require Carp;
         Carp::croak ("-base must be an unsigned integer between " .
                      "1 and 36 inclusive");
@@ -76,7 +100,8 @@ sub integer_constructor {
 
     $sign = '' if $unsigned;
 
-    return "(?k<number>:(?k<sign>:$sign)(?k<abs_number>:[$class]+))";
+    return "(?k<number>:(?k<sign>:$sign)(?k<prefix>:$prefix)" .
+           "(?k<abs_number>:[$class]+))";
 }
 
 

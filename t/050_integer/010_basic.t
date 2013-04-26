@@ -28,6 +28,7 @@ foreach my $num (0 .. 100, @special) {
                 test     =>  "Unsigned integer",
                 captures => [[number     => $integer],
                              [sign       => ""],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -47,6 +48,7 @@ foreach my $num (0 .. 100, @special) {
                 test     =>  "Positive integer",
                 captures => [[number     => $integer],
                              [sign       => "+"],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -66,6 +68,7 @@ foreach my $num (0 .. 100, @special) {
                 test     =>  "Negative integer",
                 captures => [[number     => $integer],
                              [sign       => "-"],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }

@@ -42,6 +42,7 @@ foreach my $num (@pass_4) {
                 test     =>  "Unsigned integer",
                 captures => [[number     => $integer],
                              [sign       => ""],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -63,6 +64,7 @@ foreach my $num (@pass_4) {
                 test     =>  "Positive integer",
                 captures => [[number     => $integer],
                              [sign       => "+"],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -84,6 +86,7 @@ foreach my $num (@pass_4) {
                 test     =>  "Negative integer",
                 captures => [[number     => $integer],
                              [sign       => "-"],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -122,6 +125,7 @@ foreach my $num (@pass_30) {
                 test     =>  "Unsigned integer",
                 captures => [[number     => $integer],
                              [sign       => ""],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -143,6 +147,7 @@ foreach my $num (@pass_30) {
                 test     =>  "Positive integer",
                 captures => [[number     => $integer],
                              [sign       => "+"],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -164,6 +169,7 @@ foreach my $num (@pass_30) {
                 test     =>  "Negative integer",
                 captures => [[number     => $integer],
                              [sign       => "-"],
+                             [prefix     => ""],
                              [abs_number => $num]],
             )
         }
@@ -200,6 +206,7 @@ for my $num (@pass_30_l) {
                 test     => "Lower case",
                 captures => [[number     => $integer],
                              [sign       => $sign],
+                             [prefix     => ""],
                              [abs_number => $num]]
             );
         }
