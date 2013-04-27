@@ -115,6 +115,8 @@ Regexp::Common510::Number - Abstract
 
 =head1 SYNOPSIS
 
+ use Regexp::Common510 'Number';
+
 =head1 DESCRIPTION
 
 =head1 BUGS
