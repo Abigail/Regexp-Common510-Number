@@ -1,0 +1,11 @@
+- integer
+    - Implement & test separator
+    - Implement & test group
+    - Implement & test places
+    - Fail tests for prefix
+
+- decimal
+    - Implement & test
+
+- real
+    - Implement & test
