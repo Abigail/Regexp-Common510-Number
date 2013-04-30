@@ -119,6 +119,8 @@ Regexp::Common510::Number - Abstract
 
 =head1 DESCRIPTION
 
+This module provides patterns for various numbers.
+
 =head1 BUGS
 
 =head1 TODO
