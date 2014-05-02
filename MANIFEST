@@ -4,6 +4,7 @@ MANIFEST
 t/000_basic.t
 t/050_integer/001_first.t
 t/050_integer/010_basic.t
+t/050_integer/011_basic_fail.t
 t/050_integer/020_base.t
 t/050_integer/021_base.t
 t/050_integer/025_base_bin.t

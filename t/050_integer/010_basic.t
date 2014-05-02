@@ -8,80 +8,59 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use t::Patterns;
+use Test::Regexp 2013041801;
 
 our $r = eval "require Test::NoWarnings; 1";
 
-my @special = (123456789, "00", "000000000000000000", "000001230000",
-               "9876543210" x 100);
+#
+# Tests without any options. Should match ASCII digital numbers,
+# with, or without, a sign.
+#
+my $pattern      = RE (Number => 'integer');
+my $keep_pattern = RE (Number => 'integer', -Keep => 1);
 
-foreach my $num (0 .. 100, @special) {
-    my $integer = $num;
+my $test         = Test::Regexp:: -> new -> init (
+                         pattern      => $pattern,
+                         keep_pattern => $keep_pattern,
+                         full_text    =>  1,
+                         name         => "Number integer",
+                   );
 
-    #
-    # Test matching unsigned integers
-    #
-    foreach my $test ($integer_default, $integer_unsigned) {
-        $test -> match (
-            $integer,
-            test     =>  "Unsigned integer",
-            captures => [[number     => $integer],
-                         [sign       => ""],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
+#
+# Sets of numbers to test.
+#
+my @test_sets = (
+    ["Small integer" => [0 .. 100]],
+    ["Integer"       => [123, "00", "0000000", 1234567890, 9999999999999999]],
+    ["Huge integer"  => ["0987654321" x 40, "9" x 1000]],
+);
 
-    foreach my $test ($integer_plus, $integer_minus) {
-        $test -> no_match (
-            $integer,
-            reason => "Unsigned integer"
-        )
-    }
+foreach my $test_set (@test_sets) {
+    my ($name, $set) = @$test_set;
+    foreach my $number (@$set) {
+        $test  -> match ($number,
+                          test     => "$name",
+                          captures => [[number      =>  $number],
+                                       [sign        =>  ""],
+                                       [prefix      =>  ""],
+                                       [abs_number  =>  $number]]);
 
-    #
-    # Test matching positive integers
-    #
-    $integer = "+$num";
-    foreach my $test ($integer_default, $integer_plus) {
-        $test -> match (
-            $integer,
-            test     =>  "Positive integer",
-            captures => [[number     => $integer],
-                         [sign       => "+"],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
+        $test  -> match ("-$number",
+                          test     => "$name, minus sign",
+                          captures => [[number      =>  "-$number"],
+                                       [sign        =>  "-"],
+                                       [prefix      =>  ""],
+                                       [abs_number  =>  $number]]);
 
-    foreach my $test ($integer_unsigned, $integer_minus) {
-        $test -> no_match (
-            $integer,
-            reason => "Positive integer"
-        )
-    }
-
-    #
-    # Test matching negative integers
-    #
-    $integer = "-$num";
-    foreach my $test ($integer_default, $integer_minus) {
-        $test -> match (
-            $integer,
-            test     =>  "Negative integer",
-            captures => [[number     => $integer],
-                         [sign       => "-"],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
-    foreach my $test ($integer_unsigned, $integer_plus) {
-        $test -> no_match (
-            $integer,
-            reason => "Negative integer"
-        )
+        $test  -> match ("+$number",
+                          test     => "$name, plus sign",
+                          captures => [[number      =>  "+$number"],
+                                       [sign        =>  "+"],
+                                       [prefix      =>  ""],
+                                       [abs_number  =>  $number]]);
     }
 }
+
 
 Test::NoWarnings::had_no_warnings () if $r;
 
