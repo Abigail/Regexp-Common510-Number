@@ -8,169 +8,65 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use t::Patterns;
+use Test::Regexp 2013041801;
 
 our $r = eval "require Test::NoWarnings; 1";
 
-my @pass_4    = (0 .. 3, 10 .. 13, "3210" x 20);
-my @fail_4    = (4 .. 9, 14, "123123112312391231231213");
-my @pass_30   = (0 .. 9, "A" .. "T", "TSRQPONMLKJIHGFEDCBA9876543210");
-my @pass_30_l = ("a" .. "t", "abcdefghijklmnopqrst");
-my @fail_30   = ("U" .. "Z", "1234567ABCDEFLMNU0987654321");
+my %test;
 
-foreach my $num (@pass_4) {
-    my $integer = $num;
+my $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    foreach my $test ($integer_4, $integer_default, $integer_unsigned,
-                      $integer_30, $integer_30_mixed) {
-        $test -> match (
-            $integer,
-            test     =>  "Unsigned integer",
-            captures => [[number     => $integer],
-                         [sign       => ""],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
-    foreach my $test ($integer_4_signed, $integer_plus, $integer_minus,
-                      $integer_30_minus) {
-        $test -> no_match (
-            $integer,
-            reason => "Unsigned integer"
-        )
-    }
+foreach my $base (2 .. 36) {
+    $test {$base} [0] = Test::Regexp:: -> new -> init (
+        pattern       =>  RE (Number => 'integer', -base => $base),
+        keep_pattern  =>  RE (Number => 'integer', -base => $base, -Keep => 1),
+        full_text     =>  1,
+        name          => "Number integer: -base => $base",
+    );
 
-    $integer = "+$num";
-    foreach my $test ($integer_4, $integer_4_signed, $integer_default,
-                      $integer_30, $integer_30_mixed) {
-        $test -> match (
-            $integer,
-            test     =>  "Positive integer",
-            captures => [[number     => $integer],
-                         [sign       => "+"],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
-    foreach my $test ($integer_minus, $integer_30_minus) {
-        $test -> no_match (
-            $integer,
-            reason => "Positive integer"
-        )
-    }
-
-    $integer = "-$num";
-    foreach my $test ($integer_4, $integer_4_signed, $integer_default,
-                      $integer_minus, $integer_30, $integer_30_minus,
-                      $integer_30_mixed) {
-        $test -> match (
-            $integer,
-            test     =>  "Negative integer",
-            captures => [[number     => $integer],
-                         [sign       => "-"],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
-    foreach my $test ($integer_plus) {
-        $test -> no_match (
-            $integer,
-            reason => "Negative integer"
-        )
-    }
+    $test {$base} [1] = Test::Regexp:: -> new -> init (
+        pattern       =>  RE (Number => 'integer', -base => $base,
+                                                   -case => "lower"),
+        keep_pattern  =>  RE (Number => 'integer', -base => $base, -Keep => 1,
+                                                   -case => "lower"),
+        full_text     =>  1,
+        name          => "Number integer: -base => $base",
+    );
 }
 
-foreach my $num (@fail_4) {
-    foreach my $sign ("", "-", "+") {
-        my $integer = "${sign}${num}";
+#
+# Test characters matched
+#
+my $c = 0;
+foreach my $base (2 .. 36) {
+    $c ++;
+    my $number = substr $chars => 0, $base;
+    $test {$base} [0] -> match ($number,
+                                test     => "Basic number",
+                                captures => [[number     => $number],
+                                             [sign       => ''],
+                                             [prefix     => ''],
+                                             [abs_number => $number]]
+    );
 
-        foreach my $test ($integer_4, $integer_4_signed) {
-            $test -> no_match (
-                $integer,
-                reason => "Incorrect base"
-            )
-        }
-    }
+    my $sign = $c & 1 ? "-" : "+";
+    $test {$base} [0] -> match ("$sign$number",
+                                test     => "Basic signed number",
+                                captures => [[number     => "$sign$number"],
+                                             [sign       => $sign],
+                                             [prefix     => ''],
+                                             [abs_number => $number]]
+    );
+
+    $test {$base} [1] -> match (lc $number,
+                                test     => "Basic number, lower case",
+                                captures => [[number     => lc $number],
+                                             [sign       => ''],
+                                             [prefix     => ''],
+                                             [abs_number => lc $number]]
+    );
 }
 
-
-
-foreach my $num (@pass_30) {
-    my $integer = $num;
-
-    foreach my $test ($integer_30, $integer_30_mixed) {
-        $test -> match (
-            $integer,
-            test     =>  "Unsigned integer",
-            captures => [[number     => $integer],
-                         [sign       => ""],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
-    foreach my $test ($integer_30_minus) {
-        $test -> no_match (
-            $integer,
-            reason => "Unsigned integer"
-        )
-    }
-
-    $integer = "+$num";
-    foreach my $test ($integer_30, $integer_30_mixed) {
-        $test -> match (
-            $integer,
-            test     =>  "Positive integer",
-            captures => [[number     => $integer],
-                         [sign       => "+"],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
-
-    $integer = "-$num";
-    foreach my $test ($integer_30, $integer_30_minus, $integer_30_mixed) {
-        $test -> match (
-            $integer,
-            test     =>  "Negative integer",
-            captures => [[number     => $integer],
-                         [sign       => "-"],
-                         [prefix     => ""],
-                         [abs_number => $num]],
-        )
-    }
-}
-
-foreach my $num (@fail_30) {
-    foreach my $sign ("", "-", "+") {
-        my $integer = "${sign}${num}";
-
-        foreach my $test ($integer_30, $integer_30_minus, $integer_30_mixed,
-                          $integer_30_down) {
-            $test -> no_match (
-                $integer,
-                reason => "Incorrect base"
-            )
-        }
-    }
-}
-
-
-for my $num (@pass_30_l) {
-    foreach my $sign ("", "-", "+") {
-        my $integer = "${sign}${num}";
-
-        foreach my $test ($integer_30_mixed, $integer_30_down) {
-            $test -> match (
-                $integer,
-                test     => "Lower case",
-                captures => [[number     => $integer],
-                             [sign       => $sign],
-                             [prefix     => ""],
-                             [abs_number => $num]]
-            );
-        }
-    }
-}
 
 Test::NoWarnings::had_no_warnings () if $r;
 
