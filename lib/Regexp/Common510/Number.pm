@@ -14,7 +14,7 @@ pattern Number   => 'integer',
         -config  => {
             -sign     => '[-+]?',
             -base     =>      10,
-            -case     =>    'up',
+            -case     =>   undef,
             -sep      =>   undef,
             -group    =>   undef,
             -places   =>   undef,
@@ -73,10 +73,10 @@ sub integer_constructor {
         $prefix //= $base eq 'hex' ? '(?:0x)?'
                   : $base eq 'HEX' ? '(?:0X)?'
                   :                  '(?:0[xX])?';
-        $base   = 16;
         $case   = $base eq 'hex' ? 'lower'
-                : $base eq 'HEX' ? 'up'
+                : $base eq 'HEX' ? 'upper'
                 :                  'mixed';
+        $base   = 16;
     }
     elsif ($base =~ /[^0-9]/ || $base < 1 || $base > 36) {
         require Carp;
@@ -84,18 +84,20 @@ sub integer_constructor {
                      "1 and 36 inclusive");
     }
 
-    if (lc $case !~ /^(?:up|down|mixed)$/) {
-        require Carp;
-        Carp::croak ("-case should be one of 'up', 'down' or 'mixed'");
-    }
-
     my $class = substr "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, $base;
 
-    if (lc $case eq 'down') {
-        $class = lc $class;
-    }
-    elsif (lc $case eq 'mixed') {
-        $class .= lc substr $class => 10 if $base > 10;
+    if ($case) {
+        if (lc $case !~ /^(?:upper|lower|mixed)$/) {
+            require Carp;
+            Carp::croak ("-case should be one of 'upper', 'lower' or 'mixed', not '$class'");
+        }
+
+        if (lc $case eq 'lower') {
+            $class = lc $class;
+        }
+        elsif (lc $case eq 'mixed') {
+            $class .= lc substr $class => 10 if $base > 10;
+        }
     }
 
     $sign     = '' if $unsigned;
