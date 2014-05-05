@@ -19,7 +19,7 @@ pattern Number   => 'integer',
             -group    =>   undef,
             -places   =>   undef,
             -unsigned =>   undef,
-            -prefix   =>      '',
+            -prefix   =>   undef,
         },
         -pattern => \&integer_constructor,
 ;
@@ -36,7 +36,7 @@ sub integer_constructor {
     my $group    = $args {-group};
     my $places   = $args {-places};
     my $unsigned = $args {-unsigned};
-    my $prefix   = $args {-prefix} // "";
+    my $prefix   = $args {-prefix};
 
     if (defined $group && !defined $sep) {
         if ($warn) {
@@ -60,19 +60,19 @@ sub integer_constructor {
     $base   = 10 unless length $base;
 
     if (lc $base eq 'bin') {
-        $prefix = $base eq 'bin' ? '0b'
-                : $base eq 'BIN' ? '0B'
-                :                  '0[bB]';
+        $prefix //= $base eq 'bin' ? '(?:0b)?'
+                  : $base eq 'BIN' ? '(?:0B)?'
+                  :                  '(?:0[bB])?';
         $base   =  2;
     }
     elsif (lc $base eq 'oct') {
-        $prefix = '0';
-        $base   =  8;
+        $prefix //= '(?:0)?';
+        $base     =  8;
     }
     elsif (lc $base eq 'hex') {
-        $prefix = $base eq 'hex' ? '0x'
-                : $base eq 'HEX' ? '0X'
-                :                  '0[xX]';
+        $prefix //= $base eq 'hex' ? '(?:0x)?'
+                  : $base eq 'HEX' ? '(?:0X)?'
+                  :                  '(?:0[xX])?';
         $base   = 16;
         $case   = $base eq 'hex' ? 'lower'
                 : $base eq 'HEX' ? 'up'
@@ -98,7 +98,8 @@ sub integer_constructor {
         $class .= lc substr $class => 10 if $base > 10;
     }
 
-    $sign = '' if $unsigned;
+    $sign     = '' if $unsigned;
+    $prefix //= '';
 
     return "(?k<number>:(?k<sign>:$sign)(?k<prefix>:$prefix)" .
            "(?k<abs_number>:[$class]+))";
