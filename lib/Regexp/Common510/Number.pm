@@ -120,6 +120,8 @@ Regexp::Common510::Number - Abstract
 
  use Regexp::Common510 'Number';
 
+ "-12345" =~ RE Number => 'integer';
+
 =head1 DESCRIPTION
 
 This module provides patterns for various numbers.
