@@ -89,7 +89,7 @@ sub integer_constructor {
     if ($case) {
         if (lc $case !~ /^(?:upper|lower|mixed)$/) {
             require Carp;
-            Carp::croak ("-case should be one of 'upper', 'lower' or 'mixed', not '$class'");
+            Carp::croak ("-case should be one of 'upper', 'lower' or 'mixed'");
         }
 
         if (lc $case eq 'lower') {
