@@ -98,7 +98,47 @@ foreach my $base (2 .. 36) {
                                                      [abs_number => $lc_number]]
         );
     }
+
+    #
+    # Make sure '0' and a long string of '0's are matched.
+    #
+    my $zero  =  0;
+    my $zeros = "0" x 100;
+    foreach my $key ($PLAIN, $LOWER, $MIXED, $UPPER) {
+        $test {$base} [$key] -> match ($zero,
+                                        test     => "Zero",
+                                        captures => [[number     => $zero],
+                                                     [sign       => ''],
+                                                     [prefix     => ''],
+                                                     [abs_number => $zero]]
+        );
+
+        $test {$base} [$key] -> match ("+$zero",
+                                        test     => "Positive zero",
+                                        captures => [[number     => "+$zero"],
+                                                     [sign       => '+'],
+                                                     [prefix     => ''],
+                                                     [abs_number => $zero]]
+        );
+
+        $test {$base} [$key] -> match ("-$zero",
+                                        test     => "Negative zero",
+                                        captures => [[number     => "-$zero"],
+                                                     [sign       => '-'],
+                                                     [prefix     => ''],
+                                                     [abs_number => $zero]]
+        );
+
+        $test {$base} [$key] -> match ($zeros,
+                                        test     => "Many zeros",
+                                        captures => [[number     => $zeros],
+                                                     [sign       => ''],
+                                                     [prefix     => ''],
+                                                     [abs_number => $zeros]]
+        );
+    }
 }
+
 
 
 Test::NoWarnings::had_no_warnings () if $r;
