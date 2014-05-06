@@ -10,6 +10,7 @@ no  warnings 'syntax';
 
 our $VERSION = '2013042501';
 
+
 pattern Number   => 'integer',
         -config  => {
             -sign     => '[-+]?',
@@ -92,7 +93,13 @@ sub integer_constructor {
             Carp::croak ("-case should be one of 'upper', 'lower' or 'mixed'");
         }
 
-        if (lc $case eq 'lower') {
+        if ($base <= 10) {
+            if ($warn) {
+                warn ("-case is used, but -base does not exceed 10; " .
+                      "-case setting is ignored");
+            }
+        }
+        elsif (lc $case eq 'lower') {
             $class = lc $class;
         }
         elsif (lc $case eq 'mixed') {
