@@ -6,11 +6,12 @@ t/050_integer/001_first.t
 t/050_integer/010_basic.t
 t/050_integer/011_basic_fail.t
 t/050_integer/020_sign.t
-t/050_integer/021_base.t
 t/050_integer/030_prefix.t
 t/050_integer/030_base.t
+t/050_integer/031_base_fail.t
 t/050_integer/035_base_named.t
 t/050_integer/036_base_named_fail.t
+t/050_integer/039_base_error.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t
