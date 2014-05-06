@@ -34,6 +34,10 @@ throws_ok {RE Number => "integer", -base => ' '}
           qr /^-base must be an unsigned integer between 1 and 36 inclusive/,
           "Croaks on -base not a number";
 
+throws_ok {RE Number => "integer", -base => '8', -case => 'foo'}
+          qr /^-case should be one of 'upper', 'lower' or 'mixed'/,
+          "Croaks on illegal -case";
+
 Test::NoWarnings::had_no_warnings () if $r;
 
 done_testing;
