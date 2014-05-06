@@ -37,7 +37,7 @@ foreach my $base (2 .. 36) {
                                                         -Keep => 1,
                                                         -case => "lower"),
         full_text          =>  1,
-        name               => "Number integer: -base => $base",
+        name               => "Number integer: -base => $base, -case => lower",
     );
 
     $test {$base} [$MIXED] = Test::Regexp:: -> new -> init (
@@ -47,7 +47,7 @@ foreach my $base (2 .. 36) {
                                                         -Keep => 1,
                                                         -case => "mixed"),
         full_text          =>  1,
-        name               => "Number integer: -base => $base",
+        name               => "Number integer: -base => $base, -case => mixed",
     );
 
     $test {$base} [$UPPER] = Test::Regexp:: -> new -> init (
@@ -57,7 +57,7 @@ foreach my $base (2 .. 36) {
                                                         -Keep => 1,
                                                         -case => "upper"),
         full_text          =>  1,
-        name               => "Number integer: -base => $base",
+        name               => "Number integer: -base => $base, -case => upper",
     );
 }
 
