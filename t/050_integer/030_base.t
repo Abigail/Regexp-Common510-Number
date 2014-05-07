@@ -23,7 +23,7 @@ my $LOWER = 1;
 my $MIXED = 2;
 my $UPPER = 3;
 
-foreach my $base (2 .. 36) {
+foreach my $base (1 .. 36) {
     $test {$base} [$PLAIN] = Test::Regexp:: -> new -> init (
         pattern            =>  RE (Number => 'integer', -base => $base),
         keep_pattern       =>  RE (Number => 'integer', -base => $base,
@@ -69,7 +69,7 @@ foreach my $base (2 .. 36) {
 # Test characters matched
 #
 my $c = 0;
-foreach my $base (2 .. 36) {
+foreach my $base (1 .. 36) {
     $c ++;
     my $number    = substr $chars => 0, $base;
     my $sign      = $c & 1 ? "-" : "+";

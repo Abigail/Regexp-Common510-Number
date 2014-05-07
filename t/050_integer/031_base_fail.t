@@ -27,7 +27,7 @@ my $LOWER = 1;
 my $MIXED = 2;
 my $UPPER = 3;
 
-my @BASES = (2 .. 36);
+my @BASES = (1 .. 36);
 my @CASES = ($PLAIN, $LOWER, $MIXED, $UPPER);
 
 foreach my $base (@BASES) {
