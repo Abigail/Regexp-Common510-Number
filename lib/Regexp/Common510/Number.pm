@@ -14,7 +14,8 @@ our $VERSION = '2013042501';
 pattern Number   => 'integer',
         -config  => {
             -sign     => '[-+]?',
-            -base     =>      10,
+            -base     =>   undef,
+            -chars    =>   undef,
             -case     =>   undef,
             -sep      =>   undef,
             -group    =>   undef,
@@ -31,13 +32,27 @@ sub integer_constructor {
     my $warn     = $args {-Warn};
 
     my $sign     = $args {-sign};
-    my $base     = $args {-base} // 10;
+    my $base     = $args {-base};
     my $case     = $args {-case} // "";
     my $sep      = $args {-sep};
     my $group    = $args {-group};
     my $places   = $args {-places};
     my $unsigned = $args {-unsigned};
     my $prefix   = $args {-prefix};
+    my $chars    = $args {-chars};
+
+    #
+    # Set defaults for -chars and -base. We cannot use fixed defaults.
+    #
+    if (!defined $chars || $chars eq "") {
+        $chars  = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $base //= 10;
+    }
+    else {
+        $base //= length $chars;
+    }
+
+    my $max_base = length $chars;
 
     if (defined $group && !defined $sep) {
         if ($warn) {
@@ -79,13 +94,13 @@ sub integer_constructor {
                 :                  'mixed';
         $base   = 16;
     }
-    elsif ($base =~ /[^0-9]/ || $base < 1 || $base > 36) {
+    elsif ($base =~ /[^0-9]/ || $base < 1 || $base > $max_base) {
         require Carp;
         Carp::croak ("-base must be an unsigned integer between " .
-                     "1 and 36 inclusive");
+                     "1 and $max_base inclusive");
     }
 
-    my $class = substr "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, $base;
+    my $class = quotemeta substr $chars => 0, $base;
 
     if ($case) {
         if (lc $case !~ /^(?:upper|lower|mixed)$/) {
