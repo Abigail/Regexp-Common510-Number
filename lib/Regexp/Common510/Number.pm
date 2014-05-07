@@ -27,6 +27,12 @@ pattern Number   => 'integer',
 ;
 
 
+sub _croak {
+    require Carp;
+    Carp::croak (@_);
+}
+
+
 sub integer_constructor {
     my %args     = @_;
     my $warn     = $args {-Warn};
@@ -95,17 +101,15 @@ sub integer_constructor {
         $base   = 16;
     }
     elsif ($base =~ /[^0-9]/ || $base < 1 || $base > $max_base) {
-        require Carp;
-        Carp::croak ("-base must be an unsigned integer between " .
-                     "1 and $max_base inclusive");
+        _croak "-base must be an unsigned integer between " .
+               "1 and $max_base inclusive";
     }
 
     my $class = quotemeta substr $chars => 0, $base;
 
     if ($case) {
         if (lc $case !~ /^(?:upper|lower|mixed)$/) {
-            require Carp;
-            Carp::croak ("-case should be one of 'upper', 'lower' or 'mixed'");
+            _croak "-case should be one of 'upper', 'lower' or 'mixed'";
         }
 
         if ($base <= 10) {
@@ -130,14 +134,12 @@ sub integer_constructor {
         elsif ($places =~ /^([0-9]+),([0-9]+)$/) {
             my ($f, $s) = ($1, $2);
             if ($f > $s) {
-                require Carp;
-                Carp::croak ("Can't do -places => n,m with n > m");
+                _croak "Can't do -places => n,m with n > m";
             }
             $quant = "{$f,$s}";
         }
         else {
-            require Carp;
-            Carp::croak ("Don't know what to do with '-places => $places'");
+            _croak "Don't know what to do with '-places => $places'";
         }
     }
 
