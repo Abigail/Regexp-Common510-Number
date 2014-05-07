@@ -18,7 +18,6 @@ t/960_pod_coverage.t
 t/980_versions.t
 t/981_permissions.t
 t/982_git.t
-t/Patterns.pm
 Changes
 README
 TODO

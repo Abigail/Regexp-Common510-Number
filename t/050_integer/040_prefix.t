@@ -8,7 +8,7 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use t::Patterns;
+use Test::Regexp;
 
 our $r = eval "require Test::NoWarnings; 1";
 
