@@ -107,12 +107,10 @@ sub integer_constructor {
         }
     }
 
-    $sign     = '' if $unsigned;
+    my $sign_pat   = defined $sign && !$unsigned ? "(?k<sign>:$sign)"     : "";
+    my $prefix_pat = defined $prefix             ? "(?k<prefix>:$prefix)" : "";
 
-    my $prefix_pat = defined $prefix ? "(?k<prefix>:$prefix)" : "";
-
-    return "(?k<number>:(?k<sign>:$sign)$prefix_pat" .
-           "(?k<abs_number>:[$class]+))";
+    return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:[$class]+))";
 }
 
 

@@ -24,6 +24,7 @@ my %pattern_args = (
     "+" => ["mandatory + sign"         => -sign => '[+]'],
     "-" => ["optional - sign"          => -sign => '[-]?'],
     ""  => ["unsigned"                 => -unsigned => 1],
+    "!" => ["no sign"                  => -sign => undef],
     " " => ["sign with optional space" => -sign => '(?:[-+] *)?'],
 );
 
@@ -81,20 +82,21 @@ foreach my $number (@numbers) {
     $test {"-"} -> no_match ($minus2,
                               reason => "Space after sign not allowed");
 
-    $test {""}  ->    match ($number,
-                              test     => "no sign",
-                              captures => [[number     =>  $number],
-                                           [sign       =>  ""],
-                                           [abs_number =>  $number]]);
+    foreach my $key ("", "!") {
+        $test {$key}  ->    match ($number,
+                                    test     => "no sign",
+                                    captures => [[number     =>  $number],
+                                                 [abs_number =>  $number]]);
 
-    $test {""}  -> no_match ($plus,
-                              reason => "Sign not allowed");
+        $test {$key}  -> no_match ($plus,
+                                    reason => "Sign not allowed");
 
-    $test {""}  -> no_match ($minus,
-                              reason => "Sign not allowed");
+        $test {$key}  -> no_match ($minus,
+                                    reason => "Sign not allowed");
 
-    $test {""}  -> no_match ($minus2,
-                              reason => "Sign not allowed");
+        $test {$key}  -> no_match ($minus2,
+                                    reason => "Sign not allowed");
+    }
 
     $test {" "} ->    match ($number,
                               test     => "no sign",
