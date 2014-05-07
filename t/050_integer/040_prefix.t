@@ -10,6 +10,8 @@ use Test::More 0.88;
 use Regexp::Common510 'Number';
 use Test::Regexp;
 
+use warnings 'Regexp::Common510';
+
 our $r = eval "require Test::NoWarnings; 1";
 
 my @numbers  = ("0", "9", "01234", "1091243570192345091457019850219345109851");

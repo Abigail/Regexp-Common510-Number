@@ -9,6 +9,8 @@ no  warnings 'syntax';
 use Test::More 0.88;
 use Regexp::Common510 'Number';
 
+use warnings 'Regexp::Common510';
+
 our $r = eval "require Test::NoWarnings; 1";
 
 ok "1234567890" =~ RE (Number => 'integer'), "Integer";

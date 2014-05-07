@@ -10,6 +10,8 @@ use Test::More 0.88;
 use Regexp::Common510 'Number';
 use Test::Regexp 2013041801;
 
+use warnings 'Regexp::Common510';
+
 our $r = eval "require Test::NoWarnings; 1";
 
 #
