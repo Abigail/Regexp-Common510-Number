@@ -76,7 +76,6 @@ foreach my $base (2 .. 36) {
                                         test     => "Basic number",
                                         captures => [[number     => $number],
                                                      [sign       => ''],
-                                                     [prefix     => ''],
                                                      [abs_number => $number]]
         );
 
@@ -84,7 +83,6 @@ foreach my $base (2 .. 36) {
                                           test     => "Basic signed number",
                                           captures => [[number     => $signed],
                                                        [sign       => $sign],
-                                                       [prefix     => ''],
                                                        [abs_number => $number]]
         );
     }
@@ -94,7 +92,6 @@ foreach my $base (2 .. 36) {
                                         test     => "Basic number, lower case",
                                         captures => [[number     => $lc_number],
                                                      [sign       => ''],
-                                                     [prefix     => ''],
                                                      [abs_number => $lc_number]]
         );
     }
@@ -109,7 +106,6 @@ foreach my $base (2 .. 36) {
                                         test     => "Zero",
                                         captures => [[number     => $zero],
                                                      [sign       => ''],
-                                                     [prefix     => ''],
                                                      [abs_number => $zero]]
         );
 
@@ -117,7 +113,6 @@ foreach my $base (2 .. 36) {
                                         test     => "Positive zero",
                                         captures => [[number     => "+$zero"],
                                                      [sign       => '+'],
-                                                     [prefix     => ''],
                                                      [abs_number => $zero]]
         );
 
@@ -125,7 +120,6 @@ foreach my $base (2 .. 36) {
                                         test     => "Negative zero",
                                         captures => [[number     => "-$zero"],
                                                      [sign       => '-'],
-                                                     [prefix     => ''],
                                                      [abs_number => $zero]]
         );
 
@@ -133,7 +127,6 @@ foreach my $base (2 .. 36) {
                                         test     => "Many zeros",
                                         captures => [[number     => $zeros],
                                                      [sign       => ''],
-                                                     [prefix     => ''],
                                                      [abs_number => $zeros]]
         );
     }

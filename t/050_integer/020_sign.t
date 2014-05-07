@@ -55,7 +55,6 @@ foreach my $number (@numbers) {
                               test     => "plus sign",
                               captures => [[number     =>  $plus],
                                            [sign       =>  "+"],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 
     $test {"+"} -> no_match ($minus,
@@ -68,7 +67,6 @@ foreach my $number (@numbers) {
                               test     => "no sign",
                               captures => [[number     =>  $number],
                                            [sign       =>  ""],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 
     $test {"-"} -> no_match ($plus,
@@ -78,7 +76,6 @@ foreach my $number (@numbers) {
                               test     => "minus sign",
                               captures => [[number     =>  $minus],
                                            [sign       =>  "-"],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 
     $test {"-"} -> no_match ($minus2,
@@ -88,7 +85,6 @@ foreach my $number (@numbers) {
                               test     => "no sign",
                               captures => [[number     =>  $number],
                                            [sign       =>  ""],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 
     $test {""}  -> no_match ($plus,
@@ -104,28 +100,24 @@ foreach my $number (@numbers) {
                               test     => "no sign",
                               captures => [[number     =>  $number],
                                            [sign       =>  ""],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 
     $test {" "} ->    match ($plus,
                               test     => "plus sign",
                               captures => [[number     =>  $plus],
                                            [sign       =>  "+"],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 
     $test {" "} ->    match ($minus,
                               test     => "minus sign",
                               captures => [[number     =>  $minus],
                                            [sign       =>  "-"],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 
     $test {" "} ->    match ($minus2,
                               test     => "sign with space",
                               captures => [[number     =>  $minus2],
                                            [sign       =>  "-  "],
-                                           [prefix     =>  ""],
                                            [abs_number =>  $number]]);
 }
 

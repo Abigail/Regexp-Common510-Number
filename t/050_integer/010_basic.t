@@ -42,21 +42,18 @@ foreach my $test_set (@test_sets) {
                           test     => "$name",
                           captures => [[number      =>  $number],
                                        [sign        =>  ""],
-                                       [prefix      =>  ""],
                                        [abs_number  =>  $number]]);
 
         $test  -> match ("-$number",
                           test     => "$name, minus sign",
                           captures => [[number      =>  "-$number"],
                                        [sign        =>  "-"],
-                                       [prefix      =>  ""],
                                        [abs_number  =>  $number]]);
 
         $test  -> match ("+$number",
                           test     => "$name, plus sign",
                           captures => [[number      =>  "+$number"],
                                        [sign        =>  "+"],
-                                       [prefix      =>  ""],
                                        [abs_number  =>  $number]]);
     }
 }
