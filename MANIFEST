@@ -16,6 +16,8 @@ t/050_integer/040_prefix.t
 t/050_integer/041_prefix_fail.t
 t/050_integer/050_chars.t
 t/050_integer/059_chars_error.t
+t/050_integer/060_places.t
+t/050_integer/069_places_error.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t

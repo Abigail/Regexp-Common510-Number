@@ -122,10 +122,29 @@ sub integer_constructor {
         }
     }
 
+    my $quant = "+";
+    if (defined $places) {
+        if ($places =~ /^[0-9]+$/) {
+            $quant = "{$places}";
+        }
+        elsif ($places =~ /^([0-9]+),([0-9]+)$/) {
+            my ($f, $s) = ($1, $2);
+            if ($f > $s) {
+                require Carp;
+                Carp::croak ("Can't do -places => n,m with n > m");
+            }
+            $quant = "{$f,$s}";
+        }
+        else {
+            require Carp;
+            Carp::croak ("Don't know what to do with '-places => $places'");
+        }
+    }
+
     my $sign_pat   = defined $sign && !$unsigned ? "(?k<sign>:$sign)"     : "";
     my $prefix_pat = defined $prefix             ? "(?k<prefix>:$prefix)" : "";
 
-    return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:[$class]+))";
+    return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:[$class]$quant))";
 }
 
 
