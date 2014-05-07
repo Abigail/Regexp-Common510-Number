@@ -8,7 +8,7 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use Test::Regexp 2013041801;
+use t::Common;
 
 use warnings 'Regexp::Common510';
 
@@ -18,15 +18,8 @@ our $r = eval "require Test::NoWarnings; 1";
 # Tests without any options. Should match ASCII digital numbers,
 # with, or without, a sign.
 #
-my $pattern      = RE (Number => 'integer');
-my $keep_pattern = RE (Number => 'integer', -Keep => 1);
 
-my $test         = Test::Regexp:: -> new -> init (
-                         pattern      => $pattern,
-                         keep_pattern => $keep_pattern,
-                         full_text    =>  1,
-                         name         => "Number integer",
-                   );
+my $test = integer_tester;
 
 
 use charnames ":full";

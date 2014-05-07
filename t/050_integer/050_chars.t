@@ -4,7 +4,7 @@ use 5.010;
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use Test::Regexp 2013041801;
+use t::Common;
 
 use strict;
 use warnings;
@@ -22,57 +22,21 @@ my $cham    = "\N{CHAM DIGIT ZERO}\N{CHAM DIGIT ONE}\N{CHAM DIGIT TWO}"    .
 my $evens   = "02468";
 my $special = "0-9[]";
 
-my $letter_test = Test::Regexp:: -> new -> init (
-                      pattern      => RE (Number => 'integer',
-                                         -chars  => $letters),
-                      keep_pattern => RE (Number => 'integer',
-                                         -chars  => $letters,
-                                         -Keep   => 1),
-                      name         => "Letters",
-                      full_text    =>  1
-);
+my $letter_test  = integer_tester -args => [-chars => $letters],
+                                  -name => "-chars letters";
 
-my $cham_test   = Test::Regexp:: -> new -> init (
-                      pattern      => RE (Number => 'integer',
-                                         -chars  => $cham),
-                      keep_pattern => RE (Number => 'integer',
-                                         -chars  => $cham,
-                                         -Keep   => 1),
-                      name         => "Non-ASCII characters",
-                      full_text    =>  1
-);
+my $cham_test    = integer_tester -args => [-chars => $cham],
+                                  -name => "-chars Cham digits";
 
-my $evens_test  = Test::Regexp:: -> new -> init (
-                      pattern      => RE (Number => 'integer',
-                                         -chars  => $evens),
-                      keep_pattern => RE (Number => 'integer',
-                                         -chars  => $evens,
-                                         -Keep   => 1),
-                      name         => "Less than 10 chars in -chars",
-                      full_text    =>  1
-);
+my $evens_test   = integer_tester -args => [-chars => $evens],
+                                  -name => "-chars short list";
 
-my $even2_test  = Test::Regexp:: -> new -> init (
-                      pattern      => RE (Number => 'integer',
-                                         -base   =>  2,
-                                         -chars  => $evens),
-                      keep_pattern => RE (Number => 'integer',
-                                         -base   =>  2,
-                                         -chars  => $evens,
-                                         -Keep   => 1),
-                      name         => "-base less than -char length",
-                      full_text    =>  1
-);
+my $even2_test   = integer_tester -args => [-chars => $evens, -base => 2],
+                                  -name => "-chars short list; lower -base";
 
-my $special_test  = Test::Regexp:: -> new -> init (
-                      pattern      => RE (Number => 'integer',
-                                         -chars  => $special),
-                      keep_pattern => RE (Number => 'integer',
-                                         -chars  => $special,
-                                         -Keep   => 1),
-                      name         => "Special chars",
-                      full_text    =>  1
-);
+my $special_test = integer_tester -args => [-chars => $special],
+                                  -name => "-chars with [] meta chars";
+
 
 foreach my $number ("A", "Z", "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
     my $signed = "+$number";

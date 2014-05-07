@@ -8,7 +8,7 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use Test::Regexp 2013041801;
+use t::Common;
 
 use warnings 'Regexp::Common510';
 
@@ -22,24 +22,20 @@ our $r = eval "require Test::NoWarnings; 1";
 # Various patterns
 #
 my %pattern_args = (
-    "2"  => ["-base = bin"  =>  -base => 'bin'],
-    "8"  => ["-base = oct"  =>  -base => 'oct'],
-   "16"  => ["-base = hex"  =>  -base => 'hex'],
-    "2^" => ["-base = BIN"  =>  -base => 'BIN'],
-    "8^" => ["-base = OCT"  =>  -base => 'OCT'],
-   "16^" => ["-base = HEX"  =>  -base => 'HEX'],
+    "2"  => ["-base => bin"  =>  -base => 'bin'],
+    "8"  => ["-base => oct"  =>  -base => 'oct'],
+   "16"  => ["-base => hex"  =>  -base => 'hex'],
+    "2^" => ["-base => BIN"  =>  -base => 'BIN'],
+    "8^" => ["-base => OCT"  =>  -base => 'OCT'],
+   "16^" => ["-base => HEX"  =>  -base => 'HEX'],
 );
 
 my %test;
 foreach my $key (keys %pattern_args) {
     my ($name, @args) = @{$pattern_args {$key}};
 
-    $test {$key} = Test::Regexp:: -> new -> init (
-        pattern      => RE (Number => "integer", @args),
-        keep_pattern => RE (Number => "integer", @args, -Keep => 1),
-        full_text    => 1,
-        name         => "Number integer: $name",
-    );
+    $test {$key} = integer_tester -args => \@args,
+                                  -name => $name;
 }
 
 my %numbers;

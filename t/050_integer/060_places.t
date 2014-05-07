@@ -4,7 +4,7 @@ use 5.010;
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use Test::Regexp 2013041801;
+use t::Common;
 
 use strict;
 use warnings;
@@ -15,13 +15,8 @@ our $r = eval "require Test::NoWarnings; 1";
 my %test;
 
 foreach my $places ("0", "3", "39", "0,2", "2,8") {
-    $test {$places} = Test::Regexp:: -> new -> init (
-        pattern      => RE (Number => 'integer', -places => $places),
-        keep_pattern => RE (Number => 'integer', -places => $places,
-                                                 -Keep   => 1),
-        full_text    => 1,
-        name         => "Number integer: -places => $places",
-    );
+    $test {$places} = integer_tester -args => [-places =>  $places],
+                                     -name => "-places => '$places'";
 }
 
 $test {0} -> match ("",

@@ -8,7 +8,7 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use Test::Regexp;
+use t::Common;
 
 use warnings 'Regexp::Common510';
 
@@ -19,14 +19,8 @@ my @prefixes = ("!#%", " ", "-", "+");
 
 foreach my $prefix (@prefixes) {
     my $prefix_pat = $prefix eq '+' ? "[$prefix]" : $prefix;
-    my $test = Test::Regexp:: -> new -> init (
-        pattern      => RE (Number => 'integer', -prefix => $prefix_pat,
-                                                 -Keep   => 0),
-        keep_pattern => RE (Number => 'integer', -prefix => $prefix_pat,
-                                                 -Keep   => 1),
-        full_text    => 1,
-        name         => "Number integer -prefix => '$prefix_pat'"
-    );
+    my $test = integer_tester -args => [-prefix =>  $prefix_pat],
+                              -name => "-prefix => /$prefix_pat/";
 
     foreach my $num (@numbers) {
         foreach my $sign ("", "-", "+") {

@@ -8,7 +8,7 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use Test::Regexp 2013041801;
+use t::Common;
 
 use warnings 'Regexp::Common510';
 
@@ -31,45 +31,25 @@ my @BASES = (1 .. 36);
 my @CASES = ($PLAIN, $LOWER, $MIXED, $UPPER);
 
 foreach my $base (@BASES) {
-    $test {$base} [$PLAIN] = Test::Regexp:: -> new -> init (
-        pattern            =>  RE (Number => 'integer', -base => $base),
-        keep_pattern       =>  RE (Number => 'integer', -base => $base,
-                                                        -Keep => 1),
-        full_text          =>  1,
-        name               => "Number integer: -base => $base",
-    );
+    $test {$base} [$PLAIN] = integer_tester -args => [-base =>  $base],
+                                            -name => "-base => '$base'";
 
     next unless $base > 10;
 
-    $test {$base} [$LOWER] = Test::Regexp:: -> new -> init (
-        pattern            =>  RE (Number => 'integer', -base => $base,
-                                                        -case => "lower"),
-        keep_pattern       =>  RE (Number => 'integer', -base => $base,
-                                                        -Keep => 1,
-                                                        -case => "lower"),
-        full_text          =>  1,
-        name               => "Number integer: -base => $base, -case => lower",
-    );
+    $test {$base} [$LOWER] = integer_tester -args => [-base =>  $base,
+                                                      -case => "lower"],
+                                            -name => "-base => '$base', " .
+                                                     "-case => 'lower'";
 
-    $test {$base} [$MIXED] = Test::Regexp:: -> new -> init (
-        pattern            =>  RE (Number => 'integer', -base => $base,
-                                                        -case => "mixed"),
-        keep_pattern       =>  RE (Number => 'integer', -base => $base,
-                                                        -Keep => 1,
-                                                        -case => "mixed"),
-        full_text          =>  1,
-        name               => "Number integer: -base => $base, -case => mixed",
-    );
+    $test {$base} [$MIXED] = integer_tester -args => [-base =>  $base,
+                                                      -case => "mixed"],
+                                            -name => "-base => '$base', " .
+                                                     "-case => 'mixed'";
 
-    $test {$base} [$UPPER] = Test::Regexp:: -> new -> init (
-        pattern            =>  RE (Number => 'integer', -base => $base,
-                                                        -case => "upper"),
-        keep_pattern       =>  RE (Number => 'integer', -base => $base,
-                                                        -Keep => 1,
-                                                        -case => "upper"),
-        full_text          =>  1,
-        name               => "Number integer: -base => $base, -case => upper",
-    );
+    $test {$base} [$UPPER] = integer_tester -args => [-base =>  $base,
+                                                      -case => "upper"],
+                                            -name => "-base => '$base', " .
+                                                     "-case => 'upper'";
 }
 
 

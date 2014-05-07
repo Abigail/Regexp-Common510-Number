@@ -8,7 +8,7 @@ no  warnings 'syntax';
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use Test::Regexp 2013041801;
+use t::Common;
 
 use warnings 'Regexp::Common510';
 
@@ -34,12 +34,8 @@ my %test;
 foreach my $key (keys %pattern_args) {
     my ($name, @args) = @{$pattern_args {$key}};
 
-    $test {$key} = Test::Regexp:: -> new -> init (
-        pattern      => RE (Number => "integer", @args),
-        keep_pattern => RE (Number => "integer", @args, -Keep => 1),
-        full_text    => 1,
-        name         => "Number integer: $name",
-    );
+    $test {$key} = integer_tester -args => \@args,
+                                  -name => $name;
 }
 
 
