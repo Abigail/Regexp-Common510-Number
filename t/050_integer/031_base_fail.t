@@ -39,6 +39,8 @@ foreach my $base (@BASES) {
         name               => "Number integer: -base => $base",
     );
 
+    next unless $base > 10;
+
     $test {$base} [$LOWER] = Test::Regexp:: -> new -> init (
         pattern            =>  RE (Number => 'integer', -base => $base,
                                                         -case => "lower"),
@@ -79,6 +81,7 @@ foreach my $base (@BASES) {
     # Empty string
     #
     foreach my $case (@CASES) {
+        next if $base <= 10 && $case != $PLAIN;
         $test {$base} [$case] -> no_match ("", reason => "Empty string");
     }
 
@@ -120,6 +123,7 @@ foreach my $base (@BASES) {
     # Trailing/leading garbage
     #
     foreach my $case (@CASES) {
+        next if $base <= 10 && $case != $PLAIN;
         my $test = $test {$base} [$case];
         $test -> no_match ("$number\n",         reason => "Trailing newline");
         $test -> no_match (" $number",          reason => "Leading space");

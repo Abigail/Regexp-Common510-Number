@@ -32,6 +32,8 @@ foreach my $base (2 .. 36) {
         name               => "Number integer: -base => $base",
     );
 
+    next if $base <= 10;
+
     $test {$base} [$LOWER] = Test::Regexp:: -> new -> init (
         pattern            =>  RE (Number => 'integer', -base => $base,
                                                         -case => "lower"),
@@ -73,7 +75,8 @@ foreach my $base (2 .. 36) {
     my $sign      = $c & 1 ? "-" : "+";
     my $signed    = "$sign$number";
     my $lc_number = lc $number;
-    foreach my $key ($PLAIN, $MIXED, $UPPER) {
+    my @todo      = $base <= 10 ? ($PLAIN) : ($PLAIN, $MIXED, $UPPER);
+    foreach my $key (@todo) {
         $test {$base} [$key] -> match ($number,
                                         test     => "Basic number",
                                         captures => [[number     => $number],
@@ -81,21 +84,24 @@ foreach my $base (2 .. 36) {
                                                      [abs_number => $number]]
         );
 
-        $test {$base} [$PLAIN] -> match ("$sign$number",
-                                          test     => "Basic signed number",
-                                          captures => [[number     => $signed],
-                                                       [sign       => $sign],
-                                                       [abs_number => $number]]
+        $test {$base} [$key] -> match ("$sign$number",
+                                         test     => "Basic signed number",
+                                         captures => [[number     => $signed],
+                                                      [sign       => $sign],
+                                                      [abs_number => $number]]
         );
     }
 
-    foreach my $key ($MIXED, $LOWER) {
-        $test {$base} [$key] -> match ($lc_number,
-                                        test     => "Basic number, lower case",
-                                        captures => [[number     => $lc_number],
-                                                     [sign       => ''],
-                                                     [abs_number => $lc_number]]
-        );
+    if ($base > 10) {
+        foreach my $key ($MIXED, $LOWER) {
+            $test {$base} [$key] ->
+                    match ($lc_number,
+                            test     => "Basic number, lower case",
+                            captures => [[number     => $lc_number],
+                                         [sign       => ''],
+                                         [abs_number => $lc_number]]
+            );
+        }
     }
 
     #
@@ -103,7 +109,8 @@ foreach my $base (2 .. 36) {
     #
     my $zero  =  0;
     my $zeros = "0" x 100;
-    foreach my $key ($PLAIN, $LOWER, $MIXED, $UPPER) {
+    @todo     = $base <= 10 ? ($PLAIN) : ($PLAIN, $LOWER, $MIXED, $UPPER);
+    foreach my $key (@todo) {
         $test {$base} [$key] -> match ($zero,
                                         test     => "Zero",
                                         captures => [[number     => $zero],
