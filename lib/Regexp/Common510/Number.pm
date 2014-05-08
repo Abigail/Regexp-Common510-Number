@@ -67,13 +67,6 @@ sub integer_constructor {
         undef $group;
     }
 
-    if (defined $places && defined $sep) {
-        if ($warn) {
-            warn "You cannot defined -places, if you have defined a " .
-                 "separator (-sep)\n";
-        }
-        undef $places;
-    }
 
     #
     # Process -base
@@ -126,8 +119,23 @@ sub integer_constructor {
         }
     }
 
-    my $quant = "+";
-    if (defined $places) {
+    my $abs_number = "";
+    if (defined $sep || defined $group) {
+        if (defined $places) {
+            if ($warn) {
+                warn "You cannot have -places if you also have -sep, " .
+                     "or a -group; ignoring the -places parameter";
+            }
+            undef $places;
+        }
+        $sep //= ',';       # Default.
+        if ($sep eq '.') {  # Special case.
+            $sep = '[.]';
+        }
+        $abs_number = "[$class]+(?:(?k<sep>:$sep)[$class]+)*";
+    }
+    elsif (defined $places) {
+        my $quant;
         if ($places =~ /^[0-9]+$/) {
             $quant = "{$places}";
         }
@@ -141,12 +149,16 @@ sub integer_constructor {
         else {
             _croak "Don't know what to do with '-places => $places'";
         }
+        $abs_number = "[$class]$quant";
+    }
+    else {
+        $abs_number = "[$class]+";
     }
 
     my $sign_pat   = defined $sign && !$unsigned ? "(?k<sign>:$sign)"     : "";
     my $prefix_pat = defined $prefix             ? "(?k<prefix>:$prefix)" : "";
 
-    return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:[$class]$quant))";
+    return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$abs_number))";
 }
 
 
