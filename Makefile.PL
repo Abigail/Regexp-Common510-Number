@@ -8,6 +8,8 @@ no  warnings 'syntax';
 
 use ExtUtils::MakeMaker;
 
+my  @tests        =  qw [t/*.t t/*/*.t];
+
 my  $PACKAGE      =  'Regexp::Common510::Number';
 
 my  $LIB_FILE     =  "lib/$PACKAGE.pm";
@@ -47,6 +49,10 @@ my %args = (
         },
         keywords         => [qw [ ]],
     },
+    test                 => {
+        TESTS                => $^O eq 'MSWin32' ? "@{[map {glob} @tests]}"
+                                                 : "@tests"
+    }
 );
 
 $args {META_MERGE} {build_requires} ||= {
