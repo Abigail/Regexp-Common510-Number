@@ -60,13 +60,6 @@ sub integer_constructor {
 
     my $max_base = length $chars;
 
-    if (defined $group && !defined $sep) {
-        if ($warn) {
-            warn "You must define a separator (-sep) if you have group size\n"
-        }
-        undef $group;
-    }
-
 
     #
     # Process -base
@@ -119,6 +112,10 @@ sub integer_constructor {
         }
     }
 
+    #
+    # Create the pattern for 'abs_number'. This depends on -places, 
+    # -sep, and -group.
+    #
     my $abs_number = "";
     if (defined $sep || defined $group) {
         if (defined $places) {
@@ -132,7 +129,34 @@ sub integer_constructor {
         if ($sep eq '.') {  # Special case.
             $sep = '[.]';
         }
-        $abs_number = "[$class]+(?:(?k<sep>:$sep)[$class]+)*";
+        my $pre_quant   = "+";
+        my $group_quant = "+";
+        if (defined $group) {
+            if ($group =~ /^[0-9]+$/) {
+                $pre_quant   = "{1,$group}";
+                $group_quant = "{$group}";
+            }
+            elsif ($group =~ /^([0-9]+),([0-9]+)$/) {
+                my ($f, $s) = ($1, $2);
+                if ($f > $s) {
+                    _croak "Can't do -group => n,m with n > m";
+                }
+                $pre_quant   = "{1,$s}";
+                $group_quant = "{$f,$s}";
+            }
+            else {
+                _croak "Don't know what to do with '-group => $group'";
+            }
+        }
+        $abs_number = "[$class]$pre_quant" .
+                      "(?:(?k<sep>:$sep)[$class]$group_quant)*";
+    }
+    elsif (defined $group) {
+        if ($warn) {
+            warn "You must define a separator (-sep) if you have -group " .
+                 "size; ignoring the -group parameter\n"
+        }
+        undef $group;
     }
     elsif (defined $places) {
         my $quant;

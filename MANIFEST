@@ -21,6 +21,9 @@ t/050_integer/069_places_error.t
 t/050_integer/070_sep.t
 t/050_integer/071_sep_fail.t
 t/050_integer/078_sep_warn.t
+t/050_integer/080_group.t
+t/050_integer/081_group_fail.t
+t/050_integer/089_group_error.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t
