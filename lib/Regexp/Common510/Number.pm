@@ -202,7 +202,79 @@ Regexp::Common510::Number - Abstract
 
 =head1 DESCRIPTION
 
-This module provides patterns for various numbers.
+This module provides patterns for various numbers. The general syntax to
+get a pattern is:
+
+ use Regexp::Common510 'Number';
+ my $pattern = RE (Number => <TYPE>, options...);
+
+That is, the C<< RE >> subroutine is exported by using C<< Regexp::Common510 >>.
+To get any number related pattern, the first argument of the C<< RE >> 
+subroutine should be the string C<< Number >>, followed by a string
+indicating which kind of number the pattern should be for. After the
+two strings follows zero or more options (as key value pairs). The types
+and their options are discussed below:
+
+=head2 Integer Numbers
+
+ my $pattern = RE (Number => 'integer');
+ my $pattern = RE (Number => 'integer', options...);
+ my $pattern = RE (Number => 'integer', -Keep => 1, options...);
+
+If the first two arguments of the C<< RE >>, subroutine are C<< Number >>,
+and C<< integer >>, a pattern recognizing integers is returned. Without
+options, this means the pattern recognizes a non-empty string consisting
+(ASCII) digits, optionally prefixed with a plus or a minus sign.
+
+If the C<< -Keep >> option is given the returned pattern will contain
+capturing parenthesis, using named captures. (For details on C<< -Keep >>,
+see the L<< Regexp::Common510 >> manual page). By default, the captures
+below will be present, but the set can change given the pattern modifying
+options, as described in the next subsection.
+
+=over 2
+
+=item C<< $+ {number} >>
+
+Captures the entire number.
+
+=item C<< $+ {sign} >>
+
+Captures the sign, if present. When matching against an unsigned 
+integer, C<< $+ {sign} >> will be an empty string.
+
+=item C<< $+ {abs_number >>
+
+Captures the number, without the sign.
+
+=back
+
+=head3 Pattern modifying options
+
+The following pattern modifying options are recognized (all options 
+consist of a key and a value):
+
+=over 2
+
+=item C<< -sign => '[-+]?' >>
+
+The C<< -sign >> option denotes the subpattern that matches the sign of
+the matched number. It defaults to C<< '[-+]?' >>, that is an optional
+plus or minus. If C<< -sign => undef >> is given, the pattern will only
+match unsigned integer, and C<< $+ {sign} >> will not be defined.
+
+Be careful, the value following C<< -sign >> will be directly interpolated
+into returned pattern; it's the responsibility of the caller to make sure
+it's valid syntax.
+
+=back
+
+
+=head1 EXAMPLES
+
+ "123"   =~ RE (Number => 'integer');
+ "- 123" =~ RE (Number => 'integer', -sign => '[-+] ');
+
 
 =head1 BUGS
 
