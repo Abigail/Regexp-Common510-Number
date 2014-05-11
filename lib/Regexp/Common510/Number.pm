@@ -299,7 +299,11 @@ See also the descriptions of the C<< -prefix >> and C<< -case >> options.
 
 =item C<< -case => 'lower' | 'upper' | 'mixed' >>
 
-TODO
+By default, if a base greater than 10 is used, the patterns match against
+upper case characters. This can be changed using the C<< -case >>
+parameter. It takes one of three values: C<< 'lower' >>, C<< 'upper' >>, 
+or C<< 'mixed' >>, indicating whether the pattern should match agains
+lower case characters, upper case characters or either case.
 
 =item C<< -chars => "CHARACTERLIST" >>
 
