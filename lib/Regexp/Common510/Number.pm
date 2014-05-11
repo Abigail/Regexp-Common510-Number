@@ -321,7 +321,21 @@ Unicode scripts.
 
 =item C<< -group => NUMBER | "NUMBER,NUMBER" >>
 
-TODO
+If you are using the C<< -sep >> option (see below), allowing your
+integers to have separators, you can control the size of the groups
+using the C<< -group >> option. If its value consists of a single,
+positive integer, all groups (except the first), must be of the given
+length. The leading group may be shorter, but not longer. If the value
+of the C<< -group >> option consists of two numbers separated by a 
+comma, the length of each group must be between the two numbers (inclusive);
+the length of leading group may not exceed the maximum (but may be smaller
+than the minimum length of the other groups).
+
+If C<< -group >> is used without a C<< -sep >>, a separator consisting of
+a comma C<< ',' >> is implied.
+
+A C<< -places >> option is ignored (with a warning) if a C<< -group >>
+option is used.
 
 =item C<< -places => NUMBER | "NUMBER,NUMBER" >>
 
