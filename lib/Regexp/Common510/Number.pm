@@ -252,7 +252,7 @@ Captures the number, without the sign.
 =head3 Pattern modifying options
 
 The following pattern modifying options are recognized (all options 
-consist of a key and a value):
+consist of a name and a value):
 
 =over 2
 
