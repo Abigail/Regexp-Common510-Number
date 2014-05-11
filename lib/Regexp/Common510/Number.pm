@@ -243,7 +243,7 @@ Captures the entire number.
 Captures the sign, if present. When matching against an unsigned 
 integer, C<< $+ {sign} >> will be an empty string.
 
-=item C<< $+ {abs_number >>
+=item C<< $+ {abs_number} >>
 
 Captures the number, without the sign.
 
@@ -256,7 +256,82 @@ consist of a key and a value):
 
 =over 2
 
-=item C<< -sign => '[-+]?' >>
+=item C<< -base => NUMBER >>
+
+This option indicates the base of integer being matched. The default is 10.
+Bases lower than 10 match subsets of numbers -- if the base exceeds letters
+will be matched, starting with C<< 0 .. 9, 'A' >> for base 11, all the way to 
+C<< 0 .. 9, 'A' .. 'Z' >> for base 36. 
+
+The smallest allowed base is 1 (which results in a pattern that matches
+a string of C<< '0' >>s), and the maximum base is 36 (but see the exception
+mentioned under the discussion of the C<< -chars >> option).
+
+Bases exceeding 10 results in patterns matching integer using B<< uppercase >>
+letters. This can be changed using the C<< -case >> option.
+
+=item C<< -base => 'bin'|'BIN'|'BiN'|'oct'|'hex'|'HEX'|'HeX' >>
+
+Using C<< -base >> with a value of C<< bin >>, C<< oct >> or C<< hex >>
+in some casing is a short cut for setting as given in the table below:
+
+ +--------------+-----------------------------------------------------+
+ |   Option     |                Expands to                           |
+ +--------------+-----------------------------------------------------+
+ |-base => 'bin'|-base =>  2, -prefix => '(?:0b)?'                    |
+ |-base => 'BIN'|-base =>  2, -prefix => '(?:0B)?'                    |
+ |-base => 'BiN'|-base =>  2, -prefix => '(?:0[bB])?'                 |
+ |-base => 'oct'|-base =>  8, -prefix => '(?:0)?'                     |
+ |-base => 'hex'|-base => 16, -prefix => '(?:0x)?',   -case => 'lower'|
+ |-base => 'HEX'|-base => 16, -prefix => '(?:0X)?',   -case => 'upper'|
+ |-base => 'HeX'|-base => 16, -prefix => '(?:0[xX])?' -case => 'mixed'|
+ +--------------+-----------------------------------------------------+
+
+That is, it results in patterns matching binary, octal or hexadecimal
+numbers, with optional, standard, prefixes (C<< 0b >>, C<< 0 >>, and
+C<< 0x >>). If the name is in all lowercase, the prefix, if given,
+must be in lowercase. If the name is in all uppercase, the prefix must
+be so as well. If the name is mixed case, the prefix may be either.
+(For C<< oct >>, this all results in the same prefix). For the C<< hex >>
+bases, the casing also indicates the casing of the hex digits.
+
+See also the descriptions of the C<< -prefix >> and C<< -case >> options.
+
+=item C<< -case => 'lower' | 'upper' | 'mixed' >>
+
+TODO
+
+=item C<< -chars => "CHARACTERLIST" >>
+
+By default, the patterns returned match number using ASCII digits, 
+and, if the base exceeds 10, ASCII upper case characters.
+
+This set of characters can be changed using the C<< -chars >> option;
+as argument it takes a string, and the pattern matches characters from
+this string. If C<< -base => BASE >> is given as an option as well,
+the first C<< BASE >> characters of the character list are used; it's
+an error to use a C<< BASE >> exceeding the length of the character list.
+
+This option can be used to match integers using digits from different
+Unicode scripts.
+
+=item C<< -group => NUMBER | "NUMBER,NUMBER" >>
+
+TODO
+
+=item C<< -places => NUMBER | "NUMBER,NUMBER" >>
+
+TODO
+
+=item C<< -prefix => PATTERN >>
+
+TODO
+
+=item C<< -sep => PATTERN >>
+
+TODO
+
+=item C<< -sign => PATTERN >>
 
 The C<< -sign >> option denotes the subpattern that matches the sign of
 the matched number. It defaults to C<< '[-+]?' >>, that is an optional
@@ -266,6 +341,11 @@ match unsigned integer, and C<< $+ {sign} >> will not be defined.
 Be careful, the value following C<< -sign >> will be directly interpolated
 into returned pattern; it's the responsibility of the caller to make sure
 it's valid syntax.
+
+=item C<< -unsigned => 1 >>
+
+TODO
+
 
 =back
 
