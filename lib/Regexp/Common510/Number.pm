@@ -339,7 +339,16 @@ option is used.
 
 =item C<< -places => NUMBER | "NUMBER,NUMBER" >>
 
-TODO
+The C<< -places >> option determines the length (excluding a sign or
+a prefix, see the discussions of C<< -sign >> and C<< -prefix >> below)
+of the matched number. If the C<< -places >> option has a value consisting
+of a single non-negative digit, the matched integer must be exactly this
+length. If the C<< -places >> option consists of two numbers, separated
+by a comma, the number of be of a length not smaller than the first number,
+and not exceeding the second number.
+
+The C<< -places >> option is ignored if a C<< -group >> or a C<< -sep >>
+option is used.
 
 =item C<< -prefix => PATTERN >>
 
