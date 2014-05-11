@@ -352,7 +352,18 @@ option is used.
 
 =item C<< -prefix => PATTERN >>
 
-TODO
+The C<< -prefix >> option is used to define a prefix -- a pattern that
+appears between the sign and the number itself. One of its main uses is
+to be able to match binary, octal, or hexadecimal numbers with a 
+C<< '0b' >>, C<< '0' >>, or C<< '0x' >> prefix. 
+
+If a C<< -prefix >> option is used, in combination with C<< -Keep => 1 >>,
+a named capture C<< prefix >> will be set, so that C<< $+ {prefix} >> is
+the matched prefix. 
+
+Be careful, the value following C<< -prefix >> will be directly
+interpolated into returned pattern; it's the responsibility of the caller
+to make sure it's valid syntax.
 
 =item C<< -sep => PATTERN >>
 
@@ -371,7 +382,9 @@ it's valid syntax.
 
 =item C<< -unsigned => 1 >>
 
-TODO
+This is a short-cut for C<< -sign => undef >>; that is, the resulting
+patterns will match unsigned integers, and there will be no C<< sign >>
+named captures.
 
 
 =back
