@@ -98,17 +98,20 @@ sub integer_constructor {
             _croak "-case should be one of 'upper', 'lower' or 'mixed'";
         }
 
-        if ($base <= 10) {
-            if ($warn) {
-                warn ("-case is used, but -base does not exceed 10; " .
-                      "-case setting is ignored");
-            }
-        }
-        elsif (lc $case eq 'lower') {
+        if (lc $case eq 'lower') {
             $class = lc $class;
         }
-        elsif (lc $case eq 'mixed') {
-            $class .= lc substr $class => 10 if $base > 10;
+        elsif (lc $case eq 'upper') {
+            $class = uc $class;
+        }
+        else {
+            #
+            # Remove duplicates
+            #
+            my %seen;
+            $class = join "" => grep  {!$seen {$_} ++}
+                                map   {lc, uc}
+                                split // => $class;
         }
     }
 

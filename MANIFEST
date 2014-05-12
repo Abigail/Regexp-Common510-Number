@@ -10,7 +10,6 @@ t/050_integer/030_base.t
 t/050_integer/031_base_fail.t
 t/050_integer/035_base_named.t
 t/050_integer/036_base_named_fail.t
-t/050_integer/038_base_warn.t
 t/050_integer/039_base_error.t
 t/050_integer/040_prefix.t
 t/050_integer/041_prefix_fail.t
