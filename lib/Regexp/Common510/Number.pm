@@ -367,7 +367,20 @@ to make sure it's valid syntax.
 
 =item C<< -sep => PATTERN >>
 
-TODO
+To match integers using a separator (for instance, a thousands separator
+using a comma, or Perl's underscore), use the C<< -sep >> option. Its
+value is a pattern matching the separator.
+
+If the C<< -sep >> option is used in combination with C<< -Keep => 1 >>,
+a named capture C<< sep >> will be set, so that C<< $+ {sep} >> is the
+matched separator. If there are multiple separators, the B<< last >>
+separator will be matched.
+
+Be careful, the value following C<< -prefix >> will be directly
+interpolated into returned pattern; it's the responsibility of the caller
+to make sure it's valid syntax.
+
+Use of the C<< -sep >> option means any C<< -places >> option is ignored.
 
 =item C<< -sign => PATTERN >>
 
@@ -392,9 +405,27 @@ named captures.
 
 =head1 EXAMPLES
 
- "123"   =~ RE (Number => 'integer');
- "- 123" =~ RE (Number => 'integer', -sign => '[-+] ');
+ "123"        =~ RE (Number => 'integer');
+ "+123"       =~ RE (Number => 'integer');
+ "- 123"      =~ RE (Number => 'integer', -sign => '[-+] ');
+ "+123"       !~ RE (Number => 'integer', -unsigned => 1);
+ "123AB"      =~ RE (Number => 'integer', -base => 14);
+ "123ab"      =~ RE (Number => 'integer', -base => 14, -case => "lower");
+ "0xbeefface" =~ RE (Number => 'integer', -base => 'hex');
+ "+ABCDEF"    =~ RE (Number => 'integer', -chars => "ABCDEFGHIJKLMN");
+ "12345"      =~ RE (Number => 'integer', -places => 5);
+ "1234"       !~ RE (Number => 'integer', -places => 5);
+ "1234"       =~ RE (Number => 'integer', -places => "3,5");
+ "0b001101"   =~ RE (Number => 'integer', -base => 2, -prefix => '0b');
+ "1_234_456"  =~ RE (Number => 'integer', -sep => '_');
+ "1_234_456"  !~ RE (Number => 'integer', -sep => '_', -group => 4);
+ "1_234_456"  =~ RE (Number => 'integer', -sep => '_', -group => "2,4");
 
+B<< Note: >> The C<< !~ >> is some of the examples above is a white lie.
+Some of the examples will match, but the match won't start at the beginning
+of the string -- for instance, C<< "+123" >> will match against
+C<< RE (Number => 'integer', -unsigned => 1); >>, but that's only because
+C<< "123" >> does.
 
 =head1 BUGS
 
