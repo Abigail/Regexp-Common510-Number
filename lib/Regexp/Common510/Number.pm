@@ -68,7 +68,7 @@ sub constructor {
     my $radix     = $args {-radix};      # Decimal only
     my $precision = $args {-precision};  # Decimal only
 
-    my $Type      = $args {-Name} [1];   # integer, decimal, real
+    my $Type      = $args {-Name} [0];   # integer, decimal, real
 
     #
     # Set defaults for -chars and -base. We cannot use fixed defaults.
@@ -212,7 +212,11 @@ sub constructor {
         return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$abs_number))";
     }
     elsif ($Type eq 'decimal') {
-        return "";
+        my $radix_pat        = defined $radix ? "(?k<radix>:$radix)" : "";
+        my $radix_look_ahead = defined $radix ?         "(?:$radix)" : "";
+        return "(?k<number>:$sign_pat$prefix_pat"  .  # Sign, prefix
+               "(?=$radix_look_ahead?[$class])"    .  # Avoid having just radix
+               "(?k<abs_number>:[$class]*(?:${radix_pat}[$class]*)?))";
     }
     elsif ($Type eq 'real') {
         return "";

@@ -24,6 +24,7 @@ t/050_integer/080_group.t
 t/050_integer/081_group_fail.t
 t/050_integer/089_group_error.t
 t/060_decimal/001_first.t
+t/060_decimal/010_basic.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t
