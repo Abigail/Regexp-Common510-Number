@@ -62,8 +62,6 @@ sub constructor {
     my $sep       = $args {-sep};
     my $group     = $args {-group};
     my $places    = $args {-places};     # Integer only
-    my $places1   = $args {-places1};    # Decimal only
-    my $places2   = $args {-places2};    # Decimal only
     my $unsigned  = $args {-unsigned};
     my $prefix    = $args {-prefix};
     my $chars     = $args {-chars};
