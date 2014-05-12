@@ -208,7 +208,18 @@ sub constructor {
     my $sign_pat   = defined $sign && !$unsigned ? "(?k<sign>:$sign)"     : "";
     my $prefix_pat = defined $prefix             ? "(?k<prefix>:$prefix)" : "";
 
-    return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$abs_number))";
+    if ($Type eq 'integer') {
+        return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$abs_number))";
+    }
+    elsif ($Type eq 'decimal') {
+        return "";
+    }
+    elsif ($Type eq 'real') {
+        return "";
+    }
+    else {
+        _croak "Impossible type '$Type'";
+    }
 }
 
 
