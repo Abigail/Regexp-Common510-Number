@@ -23,7 +23,26 @@ pattern Number   => 'integer',
             -unsigned =>   undef,
             -prefix   =>   undef,
         },
-        -pattern => \&integer_constructor,
+        -pattern => \&constructor,
+;
+
+
+pattern Number   => 'decimal',
+        -config  => {
+            -sign      => '[-+]?',
+            -base      =>   undef,
+            -chars     =>   undef,
+            -case      =>   undef,
+            -sep       =>   undef,
+            -group     =>   undef,
+            -places1   =>   undef,
+            -places2   =>   undef,
+            -unsigned  =>   undef,
+            -prefix    =>   undef,
+            -radix     =>  '[.]',
+            -precision =>   undef,
+        },
+        -pattern => \&constructor,
 ;
 
 
@@ -33,19 +52,25 @@ sub _croak {
 }
 
 
-sub integer_constructor {
-    my %args     = @_;
-    my $warn     = $args {-Warn};
+sub constructor {
+    my %args      = @_;
+    my $warn      = $args {-Warn};
 
-    my $sign     = $args {-sign};
-    my $base     = $args {-base};
-    my $case     = $args {-case} // "";
-    my $sep      = $args {-sep};
-    my $group    = $args {-group};
-    my $places   = $args {-places};
-    my $unsigned = $args {-unsigned};
-    my $prefix   = $args {-prefix};
-    my $chars    = $args {-chars};
+    my $sign      = $args {-sign};
+    my $base      = $args {-base};
+    my $case      = $args {-case} // "";
+    my $sep       = $args {-sep};
+    my $group     = $args {-group};
+    my $places    = $args {-places};     # Integer only
+    my $places1   = $args {-places1};    # Decimal only
+    my $places2   = $args {-places2};    # Decimal only
+    my $unsigned  = $args {-unsigned};
+    my $prefix    = $args {-prefix};
+    my $chars     = $args {-chars};
+    my $radix     = $args {-radix};      # Decimal only
+    my $precision = $args {-precision};  # Decimal only
+
+    my $Type      = $args {-Name} [1];   # integer, decimal, real
 
     #
     # Set defaults for -chars and -base. We cannot use fixed defaults.
@@ -187,6 +212,7 @@ sub integer_constructor {
 
     return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$abs_number))";
 }
+
 
 
 1;
