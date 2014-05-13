@@ -278,20 +278,44 @@ see the L<< Regexp::Common510 >> manual page). By default, the captures
 below will be present, but the set can change given the pattern modifying
 options, as described in the next subsection.
 
+
+=head2 Named Captures
+
+If C<< -Keep => 1 >> is used, the resulting patterns will contain 
+capturing parenthesis, using named captures. (For details on C<< -Keep >>,
+see the L<< Regexp::Common510 >> manual page). Below are the possible
+captures for I<< Integers >>, I<< Decimals >>, and I<< Reals >>. Some
+captures will be present by default, others only when using a particular
+option.
+
 =over 2
+
+=item C<< $+ {abs_number} >>
+
+Captures the number, without the sign or prefix. This capture will
+always be present.
 
 =item C<< $+ {number} >>
 
-Captures the entire number.
+Captures the entire number. This capture will always be present.
+
+=item C<< $+ {prefix} >>
+
+Captures the prefix (see below). This capture is only present if the
+C<< -prefix >> option is used (or C<< -base >> with a named option).
+
+=item C<< $+ {sep} >>
+
+This capture is only present if the C<< -sep >> option is used, in
+which case it matches the used separator. If no separator is present,
+C<< $+ {sep} >> will be undefined.
 
 =item C<< $+ {sign} >>
 
 Captures the sign, if present. When matching against an unsigned 
-integer, C<< $+ {sign} >> will be an empty string.
-
-=item C<< $+ {abs_number} >>
-
-Captures the number, without the sign.
+integer, C<< $+ {sign} >> will be an empty string. The capture will
+always be present, unless C<< -sign => undef >> or C<< -unsigned => 1 >>
+is given as an option.
 
 =back
 
