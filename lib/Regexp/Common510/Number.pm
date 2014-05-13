@@ -3,7 +3,7 @@ package Regexp::Common510::Number;
 use 5.010;
 use strict;
 
-use Regexp::Common510;
+use Regexp::Common510 qw [+pattern +unique_name];
 
 use warnings;
 no  warnings 'syntax';
@@ -174,8 +174,10 @@ sub constructor {
                 _croak "Don't know what to do with '-group => $group'";
             }
         }
+        my $uname   = unique_name;
         $abs_number = "[$class]$pre_quant" .
-                      "(?:(?k<sep>:$sep)[$class]$group_quant)*";
+                      "(?:(?<$uname>(?k<sep>:$sep))[$class]$group_quant" .
+                                    "(?:\\g{$uname}[$class]$group_quant)*)?";
     }
     elsif (defined $group) {
         if ($warn) {

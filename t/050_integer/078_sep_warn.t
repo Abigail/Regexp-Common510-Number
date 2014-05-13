@@ -28,9 +28,12 @@ warning_like
      qr /$match/,
     "Warn if -sep and -places are used together";
 
-match pattern => $pattern,
-      name    => "-places ignored",
-      subject => "12345";
+my ($capture) = $pattern =~ /\(\?<(__RC_[^>]+)>/;
+
+match keep_pattern => $pattern,
+      name         => "-places ignored",
+      subject      => "12345",
+      captures     => [[$capture => undef]];
 
 
 Test::NoWarnings::had_no_warnings () if $r;

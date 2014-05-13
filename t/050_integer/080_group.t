@@ -4,7 +4,7 @@ use 5.010;
 
 use Test::More 0.88;
 use Regexp::Common510 'Number';
-use t::Common;
+use Test::Regexp;
 
 use strict;
 use warnings;
@@ -12,8 +12,11 @@ no  warnings 'syntax';
 
 our $r = eval "require Test::NoWarnings; 1";
 
-my $test = integer_tester -args => [-sep => ",", -group => 3],
-                          -name => "Groups of three";
+my  $pattern       = RE (Number => 'integer', -sep => ",",  -group => 3);
+my  $keep_pattern  = RE (Number => 'integer', -sep  => ",", -group => 3,
+                                              -Keep => 1);
+my ($capture)      = $pattern      =~ /\(\?<(__RC_[^>]+)>/;
+my ($keep_capture) = $keep_pattern =~ /\(\?<(__RC_[^>]+)>/;
 
 my @data = (
     ["plain number"    => "0", "12", "000"],
@@ -27,30 +30,57 @@ foreach my $entry (@data) {
     my $sep = $test_name =~ /^plain/ ? undef : ",";
 
     foreach my $number (@numbers) {
-        $test -> match ($number,
-                         test     => "\u$test_name",
-                         captures => [[number     => $number],
-                                      [sign       => ""],
-                                      [abs_number => $number],
-                                      [sep        => $sep]],
-        );
-
         my $signed = "-$number";
 
-        $test -> match ($signed,
-                         test     => "Signed; $test_name",
-                         captures => [[number     => $signed],
-                                      [sign       => "-"],
-                                      [abs_number => $number],
-                                      [sep        => $sep]],
-        );
+        match subject      => $number,
+              name         => "Groups of three",
+              keep_pattern => $pattern,
+              captures     => [[$capture => $sep]],
+              test         => $test_name,
+              full_text    => 1;
+
+        match subject      => $number,
+              name         => "Groups of three, keeping",
+              keep_pattern => $keep_pattern,
+              captures     => [[number        => $number],
+                               [sign          => ""],
+                               [abs_number    => $number],
+                               [$keep_capture => $sep],
+                               [sep           => $sep],
+                              ],
+              test         => $test_name,
+              full_text    => 1;
+
+        #
+        # With sign
+        #
+        match subject      => $signed,
+              name         => "Groups of three",
+              keep_pattern => $pattern,
+              captures     => [[$capture => $sep]],
+              test         => $test_name . ", with sign",
+              full_text    => 1;
+
+        match subject      => $signed,
+              name         => "Groups of three, keeping",
+              keep_pattern => $keep_pattern,
+              captures     => [[number        => $signed],
+                               [sign          => "-"],
+                               [abs_number    => $number],
+                               [$keep_capture => $sep],
+                               [sep           => $sep],
+                              ],
+              test         => $test_name . ", with sign",
+              full_text    => 1;
     }
 }
 
 
-
-$test = integer_tester -args => [-sep => ",", -group => "2,5"],
-                       -name => "Groups two to five";
+ $pattern       = RE (Number => 'integer', -sep => ",",  -group => "2,5");
+ $keep_pattern  = RE (Number => 'integer', -sep  => ",", -group => "2,5",
+                                              -Keep => 1);
+($capture)      = $pattern      =~ /\(\?<(__RC_[^>]+)>/;
+($keep_capture) = $keep_pattern =~ /\(\?<(__RC_[^>]+)>/;
 
 
 @data = (
@@ -66,32 +96,66 @@ foreach my $entry (@data) {
     my $sep = $test_name =~ /^plain/ ? undef : ",";
 
     foreach my $number (@numbers) {
-        $test -> match ($number,
-                         test     => "\u$test_name",
-                         captures => [[number     => $number],
-                                      [sign       => ""],
-                                      [abs_number => $number],
-                                      [sep        => $sep]],
-        );
-
         my $signed = "-$number";
 
-        $test -> match ($signed,
-                         test     => "Signed; $test_name",
-                         captures => [[number     => $signed],
-                                      [sign       => "-"],
-                                      [abs_number => $number],
-                                      [sep        => $sep]],
-        );
+        match subject      => $number,
+              name         => "Groups of two to five",
+              keep_pattern => $pattern,
+              captures     => [[$capture => $sep]],
+              test         => $test_name,
+              full_text    => 1;
+
+        match subject      => $number,
+              name         => "Groups of two to five, keeping",
+              keep_pattern => $keep_pattern,
+              captures     => [[number        => $number],
+                               [sign          => ""],
+                               [abs_number    => $number],
+                               [$keep_capture => $sep],
+                               [sep           => $sep],
+                              ],
+              test         => $test_name,
+              full_text    => 1;
+
+        #
+        # With sign
+        #
+        match subject      => $signed,
+              name         => "Groups of two to five",
+              keep_pattern => $pattern,
+              captures     => [[$capture => $sep]],
+              test         => $test_name . ", with sign",
+              full_text    => 1;
+
+        match subject      => $signed,
+              name         => "Groups of two to five, keeping",
+              keep_pattern => $keep_pattern,
+              captures     => [[number        => $signed],
+                               [sign          => "-"],
+                               [abs_number    => $number],
+                               [$keep_capture => $sep],
+                               [sep           => $sep],
+                              ],
+              test         => $test_name . ", with sign",
+              full_text    => 1;
     }
 }
 
+#
+# Does it default to using a comma separator?
+#
+my $comma_pat   = RE (Number => 'integer', -group => 3, -sep => ",");
+my $default_pat = RE (Number => 'integer', -group => 3);
 
-is RE (Number => 'integer', -group => 3),
-   RE (Number => 'integer', -group => 3, -sep => ","),
-   "Pattern defaults to -sep => ','";
+#
+# Remove generated name, and compare
+#
+s/__RC_Number_\K[a-z_]+//g for $comma_pat, $default_pat;
 
+is $default_pat, $comma_pat, "Pattern defaults to -sep => ','";
 
 Test::NoWarnings::had_no_warnings () if $r;
 
 done_testing;
+
+__END__
