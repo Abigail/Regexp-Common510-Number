@@ -217,8 +217,10 @@ sub constructor {
         my $radix_pat        = defined $radix ? "(?k<radix>:$radix)" : "";
         my $radix_look_ahead = defined $radix ?         "(?:$radix)" : "";
         return "(?k<number>:$sign_pat$prefix_pat"  .  # Sign, prefix
-               "(?=$radix_look_ahead?[$class])"    .  # Avoid having just radix
-               "(?k<abs_number>:[$class]*(?:${radix_pat}[$class]*)?))";
+               "(?k<abs_number>:(?|"               .  # Two cases
+                    "[$class]+(?:${radix_pat}[$class]*)?"  . # With integer part
+                    "|"                                    . # or
+                    "${radix_pat}[$class]+)))";              # without
     }
     elsif ($Type eq 'real') {
         return "";
