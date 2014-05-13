@@ -32,12 +32,15 @@ foreach my $test_set (@test_sets) {
     my ($name, $set) = @$test_set;
     my $radix = $name eq 'Integer' ? undef : ".";
     foreach my $number (@$set) {
+        my ($integer, $fraction) = split /[.]/ => $number;
         $test  -> match ($number,
                           test     => "$name",
                           captures => [[number      =>  $number],
                                        [sign        =>  ""],
                                        [abs_number  =>  $number],
+                                       [integer     =>  $integer],
                                        [radix       =>  $radix],
+                                       [fraction    =>  $fraction],
                                       ]);
 
         $test  -> match ("-$number",
@@ -45,7 +48,9 @@ foreach my $test_set (@test_sets) {
                           captures => [[number      =>  "-$number"],
                                        [sign        =>  "-"],
                                        [abs_number  =>  $number],
+                                       [integer     =>  $integer],
                                        [radix       =>  $radix],
+                                       [fraction    =>  $fraction],
                                       ]);
 
         $test  -> match ("+$number",
@@ -53,7 +58,9 @@ foreach my $test_set (@test_sets) {
                           captures => [[number      =>  "+$number"],
                                        [sign        =>  "+"],
                                        [abs_number  =>  $number],
+                                       [integer     =>  $integer],
                                        [radix       =>  $radix],
+                                       [fraction    =>  $fraction],
                                       ]);
     }
 }

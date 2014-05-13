@@ -214,13 +214,16 @@ sub constructor {
         return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$abs_number))";
     }
     elsif ($Type eq 'decimal') {
-        my $radix_pat        = defined $radix ? "(?k<radix>:$radix)" : "";
-        my $radix_look_ahead = defined $radix ?         "(?:$radix)" : "";
-        return "(?k<number>:$sign_pat$prefix_pat"  .  # Sign, prefix
-               "(?k<abs_number>:(?|"               .  # Two cases
-                    "[$class]+(?:${radix_pat}[$class]*)?"  . # With integer part
-                    "|"                                    . # or
-                    "${radix_pat}[$class]+)))";              # without
+        my $radix              = defined $radix ? "(?k<radix>:$radix)" : "";
+        my $integer            = "(?k<integer>:[$class]+)";
+        my $integer_empty      = "(?k<integer>:)";
+        my $fraction           = "(?k<fraction>:[$class]*)";
+        my $fraction_non_empty = "(?k<fraction>:[$class]+)";
+        return "(?k<number>:$sign_pat$prefix_pat"    .  # Sign, prefix
+               "(?k<abs_number>:(?|"                 .  # Two cases
+                    "$integer(?:${radix}$fraction)?" .  # With integer part
+                    "|"                              .  # or
+                    "$integer_empty${radix}$fraction_non_empty)))"; # without
     }
     elsif ($Type eq 'real') {
         return "";
@@ -295,6 +298,21 @@ option.
 Captures the number, without the sign or prefix. This capture will
 always be present.
 
+=item C<< $+ {fraction} >>
+
+This capture is always present for decimal and real numbers, and never
+for integer numbers. Captures the part after the radix point. If no
+radix point is present, this capture will be undefined. If a radix
+point is present, but no digits follow the radix point, the capture
+will be the empty string.
+
+=item C<< $+ {integer} >>
+
+This capture is always present for decimal and real numbers, and never
+for integer numbers. Captures the part before the radix point (or the whole
+number if no radix point is present). The sign nor the prefix are 
+part of this capture.
+
 =item C<< $+ {number} >>
 
 Captures the entire number. This capture will always be present.
@@ -303,6 +321,13 @@ Captures the entire number. This capture will always be present.
 
 Captures the prefix (see below). This capture is only present if the
 C<< -prefix >> option is used (or C<< -base >> with a named option).
+
+=item C<< $+ {radix} >>
+
+This capture is always present for decimal numbers and real numbers,
+and never for patterns matching integers. It captures the radix point
+(decimal point). If no radix point is present, the capture will be
+undefined.
 
 =item C<< $+ {sep} >>
 
