@@ -417,12 +417,20 @@ To match integers using a separator (for instance, a thousands separator
 using a comma, or Perl's underscore), use the C<< -sep >> option. Its
 value is a pattern matching the separator.
 
+It is possible to use a pattern that allows for different separators,
+however, the pattern requires that all separators in the number
+must be equal. (So, if C<< -sep => '[,.]' >> is used, which allows
+for commas and dots as separator, that the pattern matches numbers
+that have either commas, or dots as separator, but not a mixtures
+of commas and dots). In order to enforce this, any use of C<< -sep >>
+(regardless whether C<< -Keep => 1 >> is used), will set a named
+captures (a generated name).
+
 If the C<< -sep >> option is used in combination with C<< -Keep => 1 >>,
 a named capture C<< sep >> will be set, so that C<< $+ {sep} >> is the
-matched separator. If there are multiple separators, the B<< last >>
-separator will be matched.
+matched separator.
 
-Be careful, the value following C<< -prefix >> will be directly
+Be careful, the value following C<< -sep >> will be directly
 interpolated into returned pattern; it's the responsibility of the caller
 to make sure it's valid syntax.
 
