@@ -28,6 +28,7 @@ t/060_decimal/010_basic.t
 t/060_decimal/011_basic_fail.t
 t/060_decimal/020_sign.t
 t/060_decimal/030_base.t
+t/060_decimal/035_base_named.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t
