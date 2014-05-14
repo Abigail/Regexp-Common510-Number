@@ -475,6 +475,14 @@ of commas and dots). In order to enforce this, any use of C<< -sep >>
 (regardless whether C<< -Keep => 1 >> is used), will set a named
 captures (a generated name).
 
+If the value of C<< -sep >> equals a single dot, (C<< "." >>), it's
+treated specially. Instead of matching any non-newline character 
+(as a pattern consisting of a single dot will do), it will match
+a dot, and nothing else. That is, C<< -sep => '.' >> will be a shorthand
+for C<< -sep => '[.]' >>. If you do want a separator pattern matching
+any non-newline character, consider using C<< -sep => '.{1}' >> or
+C<< -sep => '(?:.)' >> or C<< -sep => qr /./ >>.
+
 If the C<< -sep >> option is used in combination with C<< -Keep => 1 >>,
 a named capture C<< sep >> will be set, so that C<< $+ {sep} >> is the
 matched separator.
