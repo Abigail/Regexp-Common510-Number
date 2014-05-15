@@ -344,7 +344,7 @@ is given as an option.
 
 =back
 
-=head3 Pattern modifying options
+=head2 Pattern modifying options
 
 The following pattern modifying options are recognized (all options 
 consist of a name and a value):
