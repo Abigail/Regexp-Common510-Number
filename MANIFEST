@@ -30,6 +30,7 @@ t/060_decimal/020_sign.t
 t/060_decimal/030_base.t
 t/060_decimal/035_base_named.t
 t/060_integer/036_base_named_fail.t
+t/050_integer/039_base_error.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t
