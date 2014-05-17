@@ -2,15 +2,13 @@
 
 use 5.010;
 
-use strict;
-use warnings;
-no  warnings 'syntax';
-
 use Test::More 0.88;
 use Regexp::Common510 'Number';
 use t::Common;
 
-use warnings 'Regexp::Common510';
+use strict;
+use warnings;
+no  warnings 'syntax';
 
 our $r = eval "require Test::NoWarnings; 1";
 
