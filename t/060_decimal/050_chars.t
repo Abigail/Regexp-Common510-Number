@@ -83,7 +83,7 @@ foreach my $number ("$C[0]", "$C[1]$C[2].", "$C[9]$C[8]$C[7].$C[6]$C[5]$C[4]",
                                          [abs_number => $number],
                                          [integer    => $integer],
                                          [radix      => $radix],
-                                         [fraction   => $fraction],],
+                                         [fraction   => $fraction]],
     );
 
     $cham_test -> match ($signed,
@@ -93,10 +93,9 @@ foreach my $number ("$C[0]", "$C[1]$C[2].", "$C[9]$C[8]$C[7].$C[6]$C[5]$C[4]",
                                          [abs_number => $number],
                                          [integer    => $integer],
                                          [radix      => $radix],
-                                         [fraction   => $fraction],],
+                                         [fraction   => $fraction]],
     );
 }
-
 
 
 foreach my $number ("0", "2466.", ".22200", "864.20",
