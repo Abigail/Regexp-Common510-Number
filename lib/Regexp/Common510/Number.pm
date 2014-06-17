@@ -62,6 +62,8 @@ sub constructor {
     my $sep       = $args {-sep};
     my $group     = $args {-group};
     my $places    = $args {-places};     # Integer only
+    my $places1   = $args {-places1};    # Decimal only
+    my $places2   = $args {-places2};    # Decimal only
     my $unsigned  = $args {-unsigned};
     my $prefix    = $args {-prefix};
     my $chars     = $args {-chars};
@@ -142,9 +144,12 @@ sub constructor {
     # Create the pattern for 'abs_number'. This depends on -places, 
     # -sep, and -group.
     #
-    my $abs_number = "";
+    my $integer            = "";
+    my $fraction           = "";
+    my $fraction_non_empty = "";
     if (defined $sep || defined $group) {
-        if (defined $places) {
+        if (($Type eq 'integer' &&  defined $places) ||
+            ($Type eq 'decimal' && (defined $places1 || defined $places2))) {
             if ($warn) {
                 warn "You cannot have -places if you also have -sep, " .
                      "or a -group; ignoring the -places parameter";
@@ -156,10 +161,12 @@ sub constructor {
             $sep = '[.]';
         }
         my $pre_quant   = "+";
+        my $pre0_quant  = "*";
         my $group_quant = "+";
         if (defined $group) {
             if ($group =~ /^[0-9]+$/) {
                 $pre_quant   = "{1,$group}";
+                $pre0_quant  = "{0,$group}";
                 $group_quant = "{$group}";
             }
             elsif ($group =~ /^([0-9]+),([0-9]+)$/) {
@@ -168,16 +175,22 @@ sub constructor {
                     _croak "Can't do -group => n,m with n > m";
                 }
                 $pre_quant   = "{1,$s}";
+                $pre0_quant  = "{0,$s}";
                 $group_quant = "{$f,$s}";
             }
             else {
                 _croak "Don't know what to do with '-group => $group'";
             }
         }
-        my $uname   = unique_name;
-        $abs_number = "[$class]$pre_quant" .
+        my $uname = unique_name;
+        $integer  = "[$class]$pre_quant" .
                       "(?:(?<$uname>(?k<sep>:$sep))[$class]$group_quant" .
                                     "(?:\\g{$uname}[$class]$group_quant)*)?";
+        $fraction = "(?:[$class]$group_quant\\g{$uname})*[$class]$pre_quant";
+        $fraction_non_empty =
+                    "(?:[$class]$group_quant(?<$uname>(?k<sep>:$sep))" .
+                    "(?:[$class]$group_quant\\g{$uname})*)?"           .
+                    "[$class]$pre_quant";
     }
     elsif (defined $group) {
         if ($warn) {
@@ -201,24 +214,26 @@ sub constructor {
         else {
             _croak "Don't know what to do with '-places => $places'";
         }
-        $abs_number = "[$class]$quant";
+        $integer = "[$class]$quant";
     }
     else {
-        $abs_number = "[$class]+";
+        $integer            = "[$class]+";
+        $fraction           = "[$class]*";
+        $fraction_non_empty = "[$class]+";
     }
 
     my $sign_pat   = defined $sign && !$unsigned ? "(?k<sign>:$sign)"     : "";
     my $prefix_pat = defined $prefix             ? "(?k<prefix>:$prefix)" : "";
 
     if ($Type eq 'integer') {
-        return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$abs_number))";
+        return "(?k<number>:$sign_pat$prefix_pat(?k<abs_number>:$integer))";
     }
     elsif ($Type eq 'decimal') {
         my $radix              = defined $radix ? "(?k<radix>:$radix)" : "";
-        my $integer            = "(?k<integer>:[$class]+)";
+        my $integer            = "(?k<integer>:$integer)";
         my $integer_empty      = "(?k<integer>:)";
-        my $fraction           = "(?k<fraction>:[$class]*)";
-        my $fraction_non_empty = "(?k<fraction>:[$class]+)";
+        my $fraction           = "(?k<fraction>:$fraction)";
+        my $fraction_non_empty = "(?k<fraction>:$fraction_non_empty)";
         return "(?k<number>:$sign_pat$prefix_pat"    .  # Sign, prefix
                "(?k<abs_number>:(?|"                 .  # Two cases
                     "$integer(?:${radix}$fraction)?" .  # With integer part
