@@ -33,6 +33,8 @@ t/060_integer/036_base_named_fail.t
 t/060_integer/039_base_error.t
 t/060_integer/040_prefix.t
 t/060_integer/041_prefix_fail.t
+t/060_integer/050_chars.t
+t/060_integer/051_chars.t
 t/950_pod.t
 t/960_pod_coverage.t
 t/980_versions.t
